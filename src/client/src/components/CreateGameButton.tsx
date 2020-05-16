@@ -1,33 +1,31 @@
 import React, {FunctionComponent, useEffect, useState} from "react";
 import {RootState, store} from "../store";
 import {connect, ConnectedProps} from "react-redux";
-import webSocket, {sendMessage} from "../webSocket";
 import {push} from "connected-react-router";
+import {send} from "@giantmachines/redux-websocket/dist";
 
 const mapState = (state: RootState) => {
   return {
-    gameId: state.game.id
+    gameId: state.game.id,
   }
 };
 
-const connector = connect(mapState);
+const mapDispatch = {
+  createGame: (playerName: string) => send({action: 'CREATE_GAME', payload: {playerName: playerName}})
+};
 
-const CreateGameButton: FunctionComponent<ConnectedProps<typeof connector>> = ({gameId}) => {
+const connector = connect(mapState, mapDispatch);
+
+const CreateGameButton: FunctionComponent<ConnectedProps<typeof connector>> = ({gameId, createGame}) => {
 
   const [playerName, setPlayerName] = useState('');
 
   useEffect(() => {
-    webSocket.onmessage = (event) => {
-      const data = JSON.parse(event.data);
-      if (data.id !== null) {
-        store.dispatch(push(`/game/${data.id}`));
-      }
-    };
+    // using playerName is an ugly workaround
+    if (gameId !== null && playerName !== '') {
+      store.dispatch(push(`/game/${gameId}`));
+    }
   }, [gameId]);
-
-  function createGame(playerName: string) {
-    sendMessage({action: 'CREATE_GAME', payload: {playerName: playerName}})
-  }
 
   function handleKey(event: React.KeyboardEvent<HTMLInputElement>): void {
     if (event.key === 'Enter') {

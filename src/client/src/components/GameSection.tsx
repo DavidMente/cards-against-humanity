@@ -1,8 +1,5 @@
 import React, {FunctionComponent, useEffect} from "react";
 import {RootState} from "../store";
-import {Game} from "../store/game/types";
-import {setGame} from "../store/game/actions";
-import webSocket, {sendMessage} from "../webSocket";
 import {RouteComponentProps, withRouter} from 'react-router-dom';
 import {connect, ConnectedProps} from "react-redux";
 import PlayerCard from "./PlayerCard";
@@ -11,6 +8,7 @@ import JoinGameButton from "./JoinGameButton";
 import StartGameButton from "./StartGameButton";
 import RoundComponent from "./RoundComponent";
 import ReactCSSTransitionGroup from 'react-addons-css-transition-group';
+import {send} from "@giantmachines/redux-websocket/dist";
 
 const mapState = (state: RootState) => {
 
@@ -19,29 +17,29 @@ const mapState = (state: RootState) => {
   return {
     game: state.game,
     player: player,
-    isPlayer: player !== undefined
+    isPlayer: player !== undefined,
+    webSocketConnected: state.webSocket.connected
   }
 };
 
 const mapDispatch = {
-  setGame: (game: Game) => setGame(game)
+  loadGame: (gameId: string, secret: string | null) => send({
+    action: 'LOAD_GAME',
+    payload: {gameId: gameId, secret: secret}
+  }),
 };
 
 const connector = connect(mapState, mapDispatch);
 
 const GameSection: FunctionComponent<ConnectedProps<typeof connector> & RouteComponentProps<any>> =
-  ({game, setGame, match, isPlayer, player}) => {
+  ({game, match, isPlayer, player, loadGame, webSocketConnected}) => {
 
     useEffect(() => {
-      webSocket.onmessage = (event) => setGame(JSON.parse(event.data));
-    }, [setGame]);
-
-    useEffect(() => {
-      if (match.params.gameId !== null) {
+      if (match.params.gameId !== null && webSocketConnected) {
         const secret = gameRepository.getSecret(match.params.gameId);
-        sendMessage({action: 'LOAD_GAME', payload: {gameId: match.params.gameId, secret: secret}});
+        loadGame(match.params.gameId, secret);
       }
-    }, [match.params.gameId]);
+    }, [match.params.gameId, loadGame, webSocketConnected]);
 
     useEffect(() => {
       game.players.forEach((player) => {
