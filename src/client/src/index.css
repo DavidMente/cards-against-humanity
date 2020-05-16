@@ -66,3 +66,7 @@
   margin: 2px;
   font-weight: bold;
 }
+
+.navbar-custom-link:hover, .navbar-custom-link:active, .navbar-custom-link:focus {
+  color: #00d1b2 !important;
+}
