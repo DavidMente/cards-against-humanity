@@ -11,7 +11,7 @@ class GameService {
   private games: Game[];
   private readonly questions: string[];
   private readonly answers: string[];
-  public static ANWER_COUNT: number = 4;
+  public static ANSWER_COUNT: number = 4;
 
   constructor(games: Game[] = []) {
     this.games = games;
@@ -85,7 +85,7 @@ class GameService {
 
   private getAnswers(): string[] {
     const answers: string[] = [];
-    while (answers.length < GameService.ANWER_COUNT) {
+    while (answers.length < GameService.ANSWER_COUNT) {
       let answer = GameService.getRandomString(this.answers);
       if (!answers.includes(answer)) {
         answers.push(answer);
@@ -120,7 +120,5 @@ class GameService {
   }
 
 }
-
-export default GameService;
 
 export const gameService = new GameService();
