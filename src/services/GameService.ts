@@ -10,7 +10,8 @@ class GameService {
 
   private games: Game[];
   private readonly questions: string[];
-  private answers: string[];
+  private readonly answers: string[];
+  public static ANWER_COUNT: number = 4;
 
   constructor(games: Game[] = []) {
     this.games = games;
@@ -19,7 +20,9 @@ class GameService {
   }
 
   private static fileToArray(filename: string): string[] {
-    return fs.readFileSync(filename, 'utf8').toString().split('\n')
+    return fs.readFileSync(filename, 'utf8')
+      .toString().split('\n')
+      .filter((text) => text.length > 0);
   }
 
   public createGame(playerName: string, ws: WebSocket): Game {
@@ -81,7 +84,14 @@ class GameService {
   }
 
   private getAnswers(): string[] {
-    return [0, 1, 2, 3].map(() => GameService.getRandomString(this.answers));
+    const answers: string[] = [];
+    while (answers.length < GameService.ANWER_COUNT) {
+      let answer = GameService.getRandomString(this.answers);
+      if (!answers.includes(answer)) {
+        answers.push(answer);
+      }
+    }
+    return answers;
   }
 
   public findGameById(gameId: string): Game {

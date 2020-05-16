@@ -58,6 +58,8 @@
 
 .previous-round {
   padding: 20px;
+  border-radius: 6px;
+  transition: background 200ms ease-in;
 }
 
 .player-tag {
