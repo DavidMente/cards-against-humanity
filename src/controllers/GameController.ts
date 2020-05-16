@@ -58,6 +58,8 @@ class GameController {
       game.update();
       this.gameService.createNewRound(game);
       setTimeout(() => game.update(), 5000);
+    } else {
+      game.update();
     }
   };
 

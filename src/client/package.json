@@ -47,6 +47,7 @@
     "connected-react-router": "latest",
     "history": "latest",
     "react-addons-css-transition-group": "latest",
+    "react-dom-confetti": "^0.1.3",
     "react-redux": "^7.2.0",
     "react-router-dom": "latest",
     "react-transition-group": "latest",

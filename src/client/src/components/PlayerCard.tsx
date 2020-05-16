@@ -1,4 +1,4 @@
-import React, {FunctionComponent} from "react";
+import React, {FunctionComponent, useEffect, useState} from "react";
 import {Player} from "../store/game/types";
 import avatar1 from '../avatars/1.jpg';
 import avatar2 from '../avatars/2.jpg';
@@ -10,12 +10,24 @@ import avatar7 from '../avatars/7.jpg';
 import avatar8 from '../avatars/8.jpg';
 import avatar9 from '../avatars/9.jpg';
 import avatar10 from '../avatars/10.jpg';
+import Confetti from "./Confetti";
 
 type PlayerCardProps = {
   player: Player,
 }
 
 const PlayerCard: FunctionComponent<PlayerCardProps> = ({player}) => {
+
+  const [points, setPoints] = useState(-999);
+  const [hasScored, setHasScored] = useState(false);
+
+  useEffect(() => {
+    if (player.points === points + 1 && player.secret !== null) {
+      setHasScored(true);
+      setTimeout(() => setHasScored(false), 1000);
+    }
+    setPoints(player.points);
+  }, [player.points]);
 
   const avatars = [avatar1, avatar2, avatar3, avatar4, avatar5, avatar6, avatar7, avatar8, avatar9, avatar10];
   const randomNumber = player.id.charCodeAt(0);
@@ -36,6 +48,7 @@ const PlayerCard: FunctionComponent<PlayerCardProps> = ({player}) => {
         </div>
       </div>
     </div>
+    <Confetti isActive={hasScored} />
   </div>;
 };
 
