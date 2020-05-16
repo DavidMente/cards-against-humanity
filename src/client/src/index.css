@@ -1,0 +1,66 @@
+.main-section {
+  min-height: 900px;
+}
+
+.slide-fade-enter {
+  opacity: 0.01 !important;
+  transform: translateX(-200px);
+}
+
+.slide-fade-enter.slide-fade-enter-active {
+  opacity: 1 !important;
+  transition: all 500ms ease-in;
+  transform: translateX(0);
+}
+
+.slide-fade-leave {
+  opacity: 1 !important;
+}
+
+.slide-fade-leave.slide-fade-leave-active {
+  opacity: 0.01 !important;
+}
+
+.winning-answer {
+  border: 4px solid #00d1b2 !important;
+}
+
+.selectable-answer {
+  cursor: pointer;
+}
+
+.selectable-answer:hover, .selected-answer {
+  color: #00d1b2 !important;
+  box-shadow: 0 0.5em 1em -0.125em rgba(10, 10, 10, 0.1), 0 0 0 1px #00d1b2 !important;
+}
+
+.button-box {
+  width: 200px;
+}
+
+.tutorial {
+  margin-top: 35px;
+}
+
+.link-info {
+  margin: 5px;
+  font-weight: bold;
+}
+
+.input-link {
+  max-width: 400px !important;
+}
+
+.current-round {
+  min-height: 230px;
+  margin-bottom: 30px !important;
+}
+
+.previous-round {
+  padding: 20px;
+}
+
+.player-tag {
+  margin: 2px;
+  font-weight: bold;
+}
