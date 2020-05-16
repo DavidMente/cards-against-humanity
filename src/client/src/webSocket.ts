@@ -1,7 +1,7 @@
 let url: string;
 
 if (process.env.NODE_ENV === 'production') {
-  url = 'wss://davids-gaming-app.herokuapp.com';
+  url = 'wss://davids-cah-app.herokuapp.com';
 } else {
   url = 'ws://localhost:5000'
 }
