@@ -9,7 +9,11 @@ import {WEBSOCKET_PREFIX} from "./websocket/types";
 import {messageHandler} from "./messageHandler";
 
 export const history = createBrowserHistory();
-const reduxWebsocketMiddleware = reduxWebsocket({prefix: WEBSOCKET_PREFIX, reconnectInterval: 1000});
+const reduxWebsocketMiddleware = reduxWebsocket({
+  prefix: WEBSOCKET_PREFIX,
+  reconnectOnClose: true,
+  reconnectInterval: 1000
+});
 
 const rootReducer = combineReducers({
   game: gameReducer,
