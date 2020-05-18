@@ -33,7 +33,7 @@ export interface JoinGame {
 
 export interface LoadGame {
   action: typeof LOAD_GAME;
-  payload: { gameId: string, secret: string | null };
+  payload: { gameId: string };
 }
 
 export interface Vote {

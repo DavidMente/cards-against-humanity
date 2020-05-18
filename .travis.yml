@@ -3,6 +3,7 @@ node_js:
   - 12
 script:
   - npm install
+  - npm test
   - cd $TRAVIS_BUILD_DIR/src/client
   - npm install
   - npm test

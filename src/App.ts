@@ -31,6 +31,10 @@ class App {
     });
   }
 
+  public getHttpServer(): http.Server {
+    return this.httpServer;
+  }
+
   public setupWebSocketServer(): void {
     this.httpServer.on('upgrade', (request: http.IncomingMessage, socket: net.Socket, head: Buffer) => {
       this.webSocketServer.handleUpgrade(request, socket, head, (ws) => {

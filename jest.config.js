@@ -4,6 +4,8 @@ module.exports = {
   collectCoverageFrom: [
     "src/**/*.{ts,js}",
     "!**/node_modules/**",
-    "!**/client/**"
+    "!**/client/**",
+    "!**/logger.ts",
+    "!src/index.ts",
   ]
 };

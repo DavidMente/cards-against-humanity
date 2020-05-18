@@ -52,6 +52,13 @@ abstract class GameController {
     game.start();
   }
 
+  protected sendUpdateToPlayers(game: Game): void {
+    const users = game.players
+      .map((player) => userService.getUserById(player.userId))
+      .filter((user) => user !== undefined);
+    users.forEach((user) => this.response(GameController.GAME_LOADED, user!.socket, game))
+  }
+
   public response(action: string, ws: WebSocket, game: Game): void {
     const gameDto = this.gameToDto(game);
     const payload = new MessageDto(action, gameDto);
@@ -60,12 +67,6 @@ abstract class GameController {
 
   abstract gameToDto(game: Game): GameDto
 
-  public sendUpdateToPlayers(game: Game): void {
-    const users = game.players
-      .map((player) => userService.getUserById(player.userId))
-      .filter((user) => user !== undefined);
-    users.forEach((user) => this.response(GameController.GAME_LOADED, user!.socket, game))
-  }
 }
 
 export default GameController

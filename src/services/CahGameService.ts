@@ -1,34 +1,24 @@
 import CahGame from "../models/cah/CahGame";
 import Answer from "../models/cah/Answer";
 import Round from "../models/cah/Round";
-import path from "path";
-import fs from "fs";
 import Game from "../models/Game";
 import GameService from "./GameService";
 import {cahGameRepository} from "../repositories/CahGameRepository";
+import {questionsAnswersRepository} from "../repositories/QuestionsAnswersRepository";
 
 class CahGameService extends GameService {
 
-  private readonly questions: string[];
-  private readonly answers: string[];
   public static ANSWER_COUNT: number = 4;
   protected gameRepository = cahGameRepository;
+  private questionsAnswerRepository = questionsAnswersRepository;
 
   constructor() {
     super();
-    this.questions = CahGameService.fileToArray(path.resolve('src/services/questions.txt'));
-    this.answers = CahGameService.fileToArray(path.resolve('src/services/answers.txt'));
-  }
-
-  private static fileToArray(filename: string): string[] {
-    return fs.readFileSync(filename, 'utf8')
-      .toString().split('\n')
-      .filter((text) => text.length > 0);
   }
 
   public createNewRound(game: CahGame): CahGame {
-    const question = this.getQuestion();
-    const answers = this.getAnswers().map((answer) => new Answer(answer));
+    const question = this.questionsAnswerRepository.getQuestion();
+    const answers = this.questionsAnswerRepository.getAnswers(CahGameService.ANSWER_COUNT).map((answer) => new Answer(answer));
     const roundNumber = game.previousRound === null ? 1 : game.previousRound.number + 1;
     game.currentRound = new Round(question, answers, roundNumber);
     return game;
@@ -64,29 +54,10 @@ class CahGameService extends GameService {
     })
   }
 
-  private static getRandomString(array: string[]): string {
-    return array[Math.round(Math.random() * array.length)];
-  }
-
-  private getQuestion(): string {
-    return CahGameService.getRandomString(this.questions)
-  }
-
-  private getAnswers(): string[] {
-    const answers: string[] = [];
-    while (answers.length < CahGameService.ANSWER_COUNT) {
-      let answer = CahGameService.getRandomString(this.answers);
-      if (!answers.includes(answer)) {
-        answers.push(answer);
-      }
-    }
-    return answers;
-  }
-
-  createGame(id: string): Game {
+  protected createGame(id: string): Game {
     return new CahGame(id);
   }
 
 }
 
-export const cahGameService = new CahGameService();
+export default CahGameService;

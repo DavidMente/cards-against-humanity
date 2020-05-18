@@ -3,14 +3,14 @@ import {Vote} from "../routes/webSocketParser";
 import {userService} from "../services/UserService";
 import {PlayerStatus} from "../models/Player";
 import GameController from "./GameController";
-import {cahGameService} from "../services/CahGameService";
 import {cahGameRepository} from "../repositories/CahGameRepository";
 import CahGame from "../models/cah/CahGame";
 import CahGameDto from "../dto/CahGameDto";
+import CahGameService from "../services/CahGameService";
 
 class CahGameController extends GameController {
 
-  protected gameService = cahGameService;
+  protected gameService = new CahGameService();
   protected gameRepository = cahGameRepository;
 
   protected start(game: CahGame) {

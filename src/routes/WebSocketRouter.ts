@@ -1,4 +1,4 @@
-import * as WebSocket from "ws";
+import WebSocket from "ws";
 import {logger} from "../logger";
 import parseMessage, {CREATE_GAME, JOIN_GAME, LOAD_GAME, START_GAME, VOTE} from "./webSocketParser";
 import CahGameController from "../controllers/CahGameController";
@@ -6,10 +6,11 @@ import CahGameController from "../controllers/CahGameController";
 class WebSocketRouter {
 
   private webSocketServer: WebSocket.Server;
-  private gameController = new CahGameController();
+  private gameController: CahGameController;
 
-  constructor(webSocketServer: WebSocket.Server) {
+  constructor(webSocketServer: WebSocket.Server, gameController: CahGameController = new CahGameController()) {
     this.webSocketServer = webSocketServer;
+    this.gameController = gameController;
     this.setupEventHandling();
   }
 
