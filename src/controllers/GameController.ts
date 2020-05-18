@@ -2,7 +2,6 @@ import {gameService} from "../services/GameService";
 import * as WebSocket from "ws";
 import {CreateGame, JoinGame, LoadGame, StartGame, Vote} from "../routes/webSocketParser";
 import Game from "../models/Game";
-import {logger} from "../logger";
 import GameDto from "../dto/GameDto";
 import {PlayerStatus} from "../models/Player";
 import MessageDto from "../dto/MessageDto";
@@ -36,12 +35,8 @@ class GameController {
   }
 
   public joinGame = (ws: WebSocket, request: JoinGame): void => {
-    try {
-      const game = this.gameService.joinGame(request.payload.gameId, request.payload.playerName, ws);
-      game.update();
-    } catch (e) {
-      logger.warn('Join error')
-    }
+    const game = this.gameService.joinGame(request.payload.gameId, request.payload.playerName, ws);
+    game.update();
   };
 
   public vote = (ws: WebSocket, request: Vote): void => {

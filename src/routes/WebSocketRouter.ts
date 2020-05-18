@@ -15,32 +15,27 @@ class WebSocketRouter {
 
   private setupEventHandling(): void {
     this.webSocketServer.on('connection', (ws: WebSocket) => {
-      logger.info('user connected');
       ws.on('message', (message) => this.routeMessage(ws, message as string));
     })
   }
 
   public routeMessage(ws: WebSocket, payload: string): void {
     const parsedMessage = parseMessage(payload);
-    logger.info(JSON.stringify(parsedMessage));
-    switch (parsedMessage.action) {
-      case START_GAME:
-        this.gameController.startGame(ws, parsedMessage);
-        break;
-      case CREATE_GAME:
-        this.gameController.createGame(ws, parsedMessage);
-        break;
-      case LOAD_GAME:
-        this.gameController.loadGame(ws, parsedMessage);
-        break;
-      case JOIN_GAME:
-        this.gameController.joinGame(ws, parsedMessage);
-        break;
-      case VOTE:
-        this.gameController.vote(ws, parsedMessage);
-        break;
-      default:
-        logger.warn(`Unhandled action: ${payload}`);
+    if (parsedMessage !== null) {
+      switch (parsedMessage.action) {
+        case START_GAME:
+          return this.gameController.startGame(ws, parsedMessage);
+        case CREATE_GAME:
+          return this.gameController.createGame(ws, parsedMessage);
+        case LOAD_GAME:
+          return this.gameController.loadGame(ws, parsedMessage);
+        case JOIN_GAME:
+          return this.gameController.joinGame(ws, parsedMessage);
+        case VOTE:
+          return this.gameController.vote(ws, parsedMessage);
+        default:
+          logger.warn(`Unhandled action: ${payload}`);
+      }
     }
   }
 

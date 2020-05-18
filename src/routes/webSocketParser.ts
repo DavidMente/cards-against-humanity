@@ -1,8 +1,17 @@
-export default function parseMessage(message: string): WebSocketRequest {
+import {logger} from "../logger";
+
+export default function parseMessage(message: string): WebSocketRequest | null {
   try {
-    return JSON.parse(message) as WebSocketRequest;
+    const parsed = JSON.parse(message);
+    if (isWebSocketRequest(parsed)) {
+      return parsed;
+    } else {
+      logger.error(`Invalid message format: ${message}`);
+      return null;
+    }
   } catch (e) {
-    throw new TypeError(`Invalid message format: ${message}`)
+    logger.error(`Invalid message format: ${message}`);
+    return null;
   }
 }
 
@@ -38,3 +47,7 @@ export interface StartGame {
 }
 
 export type WebSocketRequest = CreateGame | JoinGame | LoadGame | Vote | StartGame
+
+function isWebSocketRequest(object: any): object is WebSocketRequest {
+  return 'action' in object && 'payload' in object;
+}
