@@ -5,14 +5,17 @@ import Game from "../models/Game";
 import {logger} from "../logger";
 import GameDto from "../dto/GameDto";
 import {PlayerStatus} from "../models/Player";
+import MessageDto from "../dto/MessageDto";
 
 class GameController {
 
+  static GAME_LOADED = 'GAME_LOADED';
+  static GAME_CREATED = 'GAME_CREATED';
   private gameService = gameService;
 
   public createGame = (ws: WebSocket, request: CreateGame): void => {
     const game = this.gameService.createGame(request.payload.playerName, ws);
-    game.update();
+    GameController.response(GameController.GAME_CREATED, ws, game);
   };
 
   public loadGame = (ws: WebSocket, request: LoadGame): void => {
@@ -21,7 +24,7 @@ class GameController {
     if (secret !== null) {
       this.reconnectWebSocket(secret, game, ws);
     }
-    GameController.response(ws, game);
+    GameController.response(GameController.GAME_LOADED, ws, game);
   };
 
   private reconnectWebSocket(secret: string | null, game: Game, ws: WebSocket) {
@@ -73,8 +76,10 @@ class GameController {
     game.update();
   };
 
-  public static response(ws: WebSocket, game: Game): void {
-    ws.send(JSON.stringify(new GameDto(game, ws)));
+  public static response(action: string, ws: WebSocket, game: Game): void {
+    const gameDto = new GameDto(game, ws);
+    const payload = new MessageDto(action, gameDto);
+    ws.send(JSON.stringify(payload));
   }
 }
 

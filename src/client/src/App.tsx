@@ -4,10 +4,10 @@ import {Provider} from "react-redux";
 import {ConnectedRouter} from "connected-react-router";
 import {Route, Switch} from 'react-router-dom';
 import {history} from './store';
-import CreateGameButton from "./components/CreateGameButton";
 import GameSection from "./components/GameSection";
 import Navbar from "./components/Navbar";
 import Footer from "./components/Footer";
+import CreateGameForm from "./components/CreateGameForm";
 
 function App() {
   return (
@@ -17,7 +17,7 @@ function App() {
         <section className="section main-section">
           <div className={'container'}>
             <Switch>
-              <Route exact path={'/'} component={CreateGameButton} />
+              <Route exact path={'/'} component={CreateGameForm} />
               <Route exact path={'/game/:gameId'} component={GameSection} />
             </Switch>
           </div>

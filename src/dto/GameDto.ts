@@ -2,7 +2,6 @@ import Game, {GameStatus} from "../models/Game";
 import Player, {PlayerStatus} from "../models/Player";
 import * as WebSocket from "ws";
 import Round from "../models/Round";
-import {logger} from "../logger";
 
 class GameDto {
 
@@ -13,7 +12,6 @@ class GameDto {
   currentRound: Round | null;
 
   constructor(game: Game, ws: WebSocket) {
-    logger.info(game.players);
     this.id = game.id;
     this.status = game.status;
     this.players = game.players.map((player) => new PlayerDto(player, ws));

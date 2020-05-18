@@ -4,11 +4,11 @@ import {RouteComponentProps, withRouter} from 'react-router-dom';
 import {connect, ConnectedProps} from "react-redux";
 import PlayerCard from "./PlayerCard";
 import {gameRepository} from "../gameRepository";
-import JoinGameButton from "./JoinGameButton";
 import StartGameButton from "./StartGameButton";
 import RoundComponent from "./RoundComponent";
 import ReactCSSTransitionGroup from 'react-addons-css-transition-group';
 import {send} from "@giantmachines/redux-websocket/dist";
+import JoinGameForm from "./JoinGameForm";
 
 const mapState = (state: RootState) => {
 
@@ -62,7 +62,7 @@ const GameSection: FunctionComponent<ConnectedProps<typeof connector> & RouteCom
           </div>
         )}
       </ReactCSSTransitionGroup>
-      {!isPlayer && game.status === 'WAITING_FOR_PLAYERS' ? <JoinGameButton gameId={match.params.gameId} /> : ''}
+      {!isPlayer && game.status === 'WAITING_FOR_PLAYERS' ? <JoinGameForm gameId={match.params.gameId} /> : ''}
       {isPlayer && game.status === 'WAITING_FOR_PLAYERS' ? <StartGameButton /> : ''}
       <ReactCSSTransitionGroup
         transitionName="slide-fade"

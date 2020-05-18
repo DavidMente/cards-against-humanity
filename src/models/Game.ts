@@ -29,7 +29,7 @@ class Game {
   }
 
   public update(): void {
-    this.players.forEach((player) => GameController.response(player.socket, this))
+    this.players.forEach((player) => GameController.response(GameController.GAME_LOADED, player.socket, this))
   }
 
 }
