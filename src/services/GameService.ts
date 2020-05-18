@@ -1,124 +1,39 @@
 import Game from "../models/Game";
 import Player, {PlayerStatus} from "../models/Player";
-import * as WebSocket from "ws";
-import fs from 'fs';
-import Round from "../models/Round";
-import Answer from "../models/Answer";
-import path from "path";
+import {GameRepository} from "../repositories/GameRepository";
 
-class GameService {
+abstract class GameService {
 
-  private games: Game[];
-  private readonly questions: string[];
-  private readonly answers: string[];
-  public static ANSWER_COUNT: number = 4;
+  protected abstract createGame(id: string): Game;
+  protected abstract gameRepository: GameRepository;
 
-  constructor(games: Game[] = []) {
-    this.games = games;
-    this.questions = GameService.fileToArray(path.resolve('src/services/questions.txt'));
-    this.answers = GameService.fileToArray(path.resolve('src/services/answers.txt'));
-  }
-
-  private static fileToArray(filename: string): string[] {
-    return fs.readFileSync(filename, 'utf8')
-      .toString().split('\n')
-      .filter((text) => text.length > 0);
-  }
-
-  public createGame(playerName: string, ws: WebSocket): Game {
-    const newId = this.games.length + 100;
-    const newGame = new Game(newId.toString());
-    GameService.addNewPlayerToGame(ws, playerName, newGame);
-    this.games = [...this.games, newGame];
+  public createGameWithPlayer(playerName: string, userId: string): Game {
+    const newId = this.gameRepository.getGames.length + 100;
+    const newGame = this.createGame(newId.toString());
+    GameService.addNewPlayerToGame(userId, playerName, newGame);
+    this.gameRepository.addGame(newGame);
     return newGame;
   }
 
-  public processCurrentRound(game: Game): void {
-    const round = game.currentRound!;
-    const voteCounts = round.answers.map((answer) => answer.votes.length);
-    let max = 0, winningIndex = null;
-    voteCounts.forEach((count, index) => {
-      if (count > max) {
-        max = count;
-        winningIndex = index;
-      } else if (count === max) {
-        winningIndex = null;
-      }
-    });
-    if (winningIndex !== null) {
-      const winningAnswer = round.answers[winningIndex];
-      this.addPointsForWinningAnswer(game, winningAnswer);
-    }
-    game.previousRound = game.currentRound;
-    game.currentRound = null;
-    this.setPlayersNotReady(game);
-  }
-
-  private addPointsForWinningAnswer(game: Game, winningAnswer: Answer) {
-    winningAnswer.votes.forEach((vote) => {
-      const player = game.players.find((player) => player.id === vote.id);
-      if (player !== undefined) {
-        player.points++
-      }
-    })
-  }
-
-  public createNewRound(game: Game): Game {
-    const question = this.getQuestion();
-    const answers = this.getAnswers().map((answer) => new Answer(answer));
-    const roundNumber = game.previousRound === null ? 1 : game.previousRound.number + 1;
-    game.currentRound = new Round(question, answers, roundNumber);
-    return game;
-  }
-
-  private setPlayersNotReady(game: Game): void {
+  protected setPlayersNotReady(game: Game): void {
     game.players = game.players.map((player) => ({...player, status: PlayerStatus.NOT_READY}));
   }
 
-  private static getRandomString(array: string[]): string {
-    return array[Math.round(Math.random() * array.length)];
-  }
-
-  private getQuestion(): string {
-    return GameService.getRandomString(this.questions)
-  }
-
-  private getAnswers(): string[] {
-    const answers: string[] = [];
-    while (answers.length < GameService.ANSWER_COUNT) {
-      let answer = GameService.getRandomString(this.answers);
-      if (!answers.includes(answer)) {
-        answers.push(answer);
-      }
-    }
-    return answers;
-  }
-
-  public findGameById(gameId: string): Game {
-    const game = this.games.find((game) => game.id === gameId);
-    if (game === undefined) {
-      return new Game();
-    } else {
-      return game;
+  public joinGame(game: Game, playerName: string, userId: string): void {
+    if (game !== undefined) {
+      GameService.addNewPlayerToGame(userId, playerName, game);
     }
   }
 
-  public joinGame(gameId: string, playerName: string, ws: WebSocket): Game {
-    const game = this.findGameById(gameId);
-    GameService.addNewPlayerToGame(ws, playerName, game);
-    return game;
+  public findPlayerByUserId(players: Player[], userId: string): Player | undefined {
+    return players.find((player) => player.userId === userId);
   }
 
-  public findPlayerBySocket(players: Player[], ws: WebSocket): Player | undefined {
-    return players.find((player) => player.socket === ws);
-  }
-
-  private static addNewPlayerToGame(ws: WebSocket, playerName: string, game: Game): Game {
-    const newPlayer = new Player(ws, playerName);
+  private static addNewPlayerToGame(userId: string, playerName: string, game: Game): void {
+    const newPlayer = new Player(userId, playerName);
     game.addPlayer(newPlayer);
-    return game;
   }
 
 }
 
-export const gameService = new GameService();
+export default GameService;

@@ -3,7 +3,6 @@ import {RootState} from "../store";
 import {RouteComponentProps, withRouter} from 'react-router-dom';
 import {connect, ConnectedProps} from "react-redux";
 import PlayerCard from "./PlayerCard";
-import {gameRepository} from "../gameRepository";
 import StartGameButton from "./StartGameButton";
 import RoundComponent from "./RoundComponent";
 import ReactCSSTransitionGroup from 'react-addons-css-transition-group';
@@ -23,9 +22,9 @@ const mapState = (state: RootState) => {
 };
 
 const mapDispatch = {
-  loadGame: (gameId: string, secret: string | null) => send({
+  loadGame: (gameId: string) => send({
     action: 'LOAD_GAME',
-    payload: {gameId: gameId, secret: secret}
+    payload: {gameId: gameId}
   }),
 };
 
@@ -36,18 +35,9 @@ const GameSection: FunctionComponent<ConnectedProps<typeof connector> & RouteCom
 
     useEffect(() => {
       if (match.params.gameId !== null && webSocketConnected) {
-        const secret = gameRepository.getSecret(match.params.gameId);
-        loadGame(match.params.gameId, secret);
+        loadGame(match.params.gameId);
       }
     }, [match.params.gameId, loadGame, webSocketConnected]);
-
-    useEffect(() => {
-      game.players.forEach((player) => {
-        if (player.secret !== null) {
-          gameRepository.storeSecret(game.id!, player.secret)
-        }
-      })
-    }, [game]);
 
     return <div>
       <ReactCSSTransitionGroup

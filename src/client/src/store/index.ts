@@ -7,6 +7,7 @@ import {connect} from "@giantmachines/redux-websocket/dist";
 import {webSocketReducer} from "./websocket/reducers";
 import {WEBSOCKET_PREFIX} from "./websocket/types";
 import {messageHandler} from "./messageHandler";
+import {authentication} from "../authentication";
 
 export const history = createBrowserHistory();
 const reduxWebsocketMiddleware = reduxWebsocket({
@@ -34,4 +35,6 @@ if (process.env.NODE_ENV === 'production') {
   url = 'ws://localhost:5000'
 }
 
-store.dispatch(connect(url));
+const secret = authentication.getSecret();
+const args = secret !== null ? [secret] : [];
+store.dispatch(connect(url, args));

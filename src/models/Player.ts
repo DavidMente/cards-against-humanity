@@ -1,5 +1,4 @@
 import {getRandomId} from "../utils/getRandomId";
-import * as WebSocket from 'ws';
 
 export enum PlayerStatus {
   NOT_READY = 'NOT_READY',
@@ -9,17 +8,15 @@ export enum PlayerStatus {
 class Player {
 
   public id: string;
+  public userId: string;
   public name: string;
-  public socket: WebSocket;
-  public secret: string;
   public points: number = 0;
   public status: PlayerStatus = PlayerStatus.NOT_READY;
 
-  constructor(ws: WebSocket, name: string) {
+  constructor(userId: string, name: string) {
     this.id = getRandomId();
-    this.socket = ws;
+    this.userId = userId;
     this.name = name;
-    this.secret = getRandomId();
   }
 
 }

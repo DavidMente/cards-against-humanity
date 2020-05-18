@@ -1,80 +1,70 @@
-import {gameService} from "../services/GameService";
-import * as WebSocket from "ws";
-import {CreateGame, JoinGame, LoadGame, StartGame, Vote} from "../routes/webSocketParser";
-import Game from "../models/Game";
-import GameDto from "../dto/GameDto";
-import {PlayerStatus} from "../models/Player";
+import WebSocket from "ws";
+import {CreateGame, JoinGame, LoadGame, StartGame} from "../routes/webSocketParser";
 import MessageDto from "../dto/MessageDto";
+import {userService} from "../services/UserService";
+import GameService from "../services/GameService";
+import Game from "../models/Game";
+import {GameRepository} from "../repositories/GameRepository";
+import {GameDto} from "../dto/GameDto";
 
-class GameController {
+abstract class GameController {
 
   static GAME_LOADED = 'GAME_LOADED';
   static GAME_CREATED = 'GAME_CREATED';
-  private gameService = gameService;
+  protected abstract gameService: GameService;
+  protected abstract gameRepository: GameRepository;
 
   public createGame = (ws: WebSocket, request: CreateGame): void => {
-    const game = this.gameService.createGame(request.payload.playerName, ws);
-    GameController.response(GameController.GAME_CREATED, ws, game);
+    const user = userService.getUserByWebSocket(ws);
+    const game = this.gameService.createGameWithPlayer(request.payload.playerName, user.id);
+    this.response(GameController.GAME_CREATED, ws, game);
   };
 
   public loadGame = (ws: WebSocket, request: LoadGame): void => {
-    const game = this.gameService.findGameById(request.payload.gameId);
-    const secret = request.payload.secret;
-    if (secret !== null) {
-      this.reconnectWebSocket(secret, game, ws);
+    const game = this.gameRepository.findGameById(request.payload.gameId);
+    if (game !== undefined) {
+      this.response(GameController.GAME_LOADED, ws, game);
     }
-    GameController.response(GameController.GAME_LOADED, ws, game);
   };
-
-  private reconnectWebSocket(secret: string | null, game: Game, ws: WebSocket) {
-    game.players.forEach((player) => {
-      if (player.secret === secret) {
-        player.socket = ws;
-      }
-    })
-  }
 
   public joinGame = (ws: WebSocket, request: JoinGame): void => {
-    const game = this.gameService.joinGame(request.payload.gameId, request.payload.playerName, ws);
-    game.update();
-  };
-
-  public vote = (ws: WebSocket, request: Vote): void => {
-    const game = this.gameService.findGameById(request.payload.gameId);
-    const player = this.gameService.findPlayerBySocket(game.players, ws);
-    if (player !== undefined && player.status === PlayerStatus.NOT_READY && game.currentRound !== null) {
-      player.status = PlayerStatus.READY;
-      const answer = game.currentRound.answers
-        .find((answer, index) => index === request.payload.answer);
-      if (answer !== undefined) {
-        answer.votes = [...answer.votes, {id: player.id, name: player.name}];
-      }
-    }
-    const playersReady = game.players.filter((player) => player.status === PlayerStatus.READY).length === game.players.length;
-    if (playersReady) {
-      this.gameService.processCurrentRound(game);
-      game.update();
-      this.gameService.createNewRound(game);
-      setTimeout(() => game.update(), 5000);
-    } else {
-      game.update();
+    const user = userService.getUserByWebSocket(ws);
+    const game = this.gameRepository.findGameById(request.payload.gameId);
+    if (game !== undefined) {
+      this.gameService.joinGame(game, request.payload.playerName, user.id);
+      this.sendUpdateToPlayers(game);
     }
   };
 
   public startGame = (ws: WebSocket, request: StartGame): void => {
-    const game = this.gameService.findGameById(request.payload.gameId);
-    const player = this.gameService.findPlayerBySocket(game.players, ws);
-    if (player !== undefined) {
-      game.start();
-      this.gameService.createNewRound(game);
+    const user = userService.getUserByWebSocket(ws);
+    const game = this.gameRepository.findGameById(request.payload.gameId);
+    if (game !== undefined) {
+      const player = this.gameService.findPlayerByUserId(game.players, user.id);
+      if (player !== undefined) {
+        this.start(game);
+        this.sendUpdateToPlayers(game);
+      }
     }
-    game.update();
   };
 
-  public static response(action: string, ws: WebSocket, game: Game): void {
-    const gameDto = new GameDto(game, ws);
+  protected start(game: Game) {
+    game.start();
+  }
+
+  public response(action: string, ws: WebSocket, game: Game): void {
+    const gameDto = this.gameToDto(game);
     const payload = new MessageDto(action, gameDto);
     ws.send(JSON.stringify(payload));
+  }
+
+  abstract gameToDto(game: Game): GameDto
+
+  public sendUpdateToPlayers(game: Game): void {
+    const users = game.players
+      .map((player) => userService.getUserById(player.userId))
+      .filter((user) => user !== undefined);
+    users.forEach((user) => this.response(GameController.GAME_LOADED, user!.socket, game))
   }
 }
 
