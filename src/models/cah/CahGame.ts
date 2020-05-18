@@ -1,5 +1,5 @@
 import Game from "../Game";
-import Round from "../Round";
+import Round from "./Round";
 
 class CahGame extends Game {
 

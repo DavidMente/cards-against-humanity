@@ -1,6 +1,6 @@
 import {GameStatus} from "../models/Game";
 import Player, {PlayerStatus} from "../models/Player";
-import Round from "../models/Round";
+import Round from "../models/cah/Round";
 import CahGame from "../models/cah/CahGame";
 import {PlayerDto} from "./PlayerDto";
 import {GameDto} from "./GameDto";

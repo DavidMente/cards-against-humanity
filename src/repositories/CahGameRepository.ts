@@ -20,4 +20,6 @@ class CahGameRepository implements GameRepository {
 
 }
 
+export default CahGameRepository;
+
 export const cahGameRepository = new CahGameRepository();
