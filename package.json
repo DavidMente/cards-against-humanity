@@ -8,8 +8,8 @@
     "build": "npm run build-client && node ./util/build.js",
     "start": "node ./dist/index.js",
     "start:dev": "nodemon --config nodemon.json",
-    "test": "cross-env PORT=8080 jest",
-    "test:coverage": "cross-env PORT=8080 jest --coverage"
+    "test": "jest",
+    "test:coverage": "npm test -- --coverage"
   },
   "engines": {
     "node": "12.x"
