@@ -1,10 +1,10 @@
 import WebSocket from "ws";
 import User from "../models/User";
-import UserRepository from "../repositories/UserRepository";
+import UserRepository, {userRepository} from "../repositories/UserRepository";
 
 class AuthenticationService {
 
-  private userRepository: UserRepository = new UserRepository();
+  private userRepository: UserRepository = userRepository;
 
   public authenticate(secret: string | undefined, ws: WebSocket): User {
     return this.userRepository.findOrCreateUser(ws, secret);

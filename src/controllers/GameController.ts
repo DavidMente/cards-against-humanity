@@ -5,7 +5,7 @@ import GameService from "../services/GameService";
 import Game from "../models/Game";
 import {GameRepository} from "../repositories/GameRepository";
 import {GameDto} from "../dto/GameDto";
-import UserRepository, {userRepository} from "../repositories/UserRepository";
+import UserRepository from "../repositories/UserRepository";
 
 abstract class GameController {
 
