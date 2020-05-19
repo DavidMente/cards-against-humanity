@@ -1,6 +1,10 @@
 module.exports = {
   preset: 'ts-jest',
   testEnvironment: 'node',
+  testPathIgnorePatterns : [
+    "<rootDir>/node_modules",
+    "<rootDir>/src/client",
+  ],
   collectCoverageFrom: [
     "src/**/*.{ts,js}",
     "!**/node_modules/**",

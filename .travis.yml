@@ -4,6 +4,12 @@ node_js:
 cache:
   directories:
     - node_modules
+script:
+  - npm test
+  - cd $TRAVIS_BUILD_DIR/src/client
+  - npm install
+  - npm test
+  - cd $TRAVIS_BUILD_DIR
 deploy:
   skip_cleanup: true
   provider: heroku
