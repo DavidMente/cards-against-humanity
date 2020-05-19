@@ -7,5 +7,6 @@ module.exports = {
     "!**/client/**",
     "!**/logger.ts",
     "!src/index.ts",
-  ]
+    "!**/__mocks__/**"
+  ],
 };

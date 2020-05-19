@@ -1,7 +1,7 @@
 import User from "../models/User";
 import WebSocket from "ws";
 
-class UserService {
+class UserRepository {
 
   private users: User[] = [];
 
@@ -33,4 +33,6 @@ class UserService {
 
 }
 
-export const userService = new UserService();
+export default UserRepository;
+
+export const userRepository = new UserRepository();

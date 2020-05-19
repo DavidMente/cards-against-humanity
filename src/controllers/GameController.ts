@@ -1,11 +1,11 @@
 import WebSocket from "ws";
 import {CreateGame, JoinGame, LoadGame, StartGame} from "../routes/webSocketParser";
 import MessageDto from "../dto/MessageDto";
-import {userService} from "../services/UserService";
 import GameService from "../services/GameService";
 import Game from "../models/Game";
 import {GameRepository} from "../repositories/GameRepository";
 import {GameDto} from "../dto/GameDto";
+import UserRepository, {userRepository} from "../repositories/UserRepository";
 
 abstract class GameController {
 
@@ -13,9 +13,10 @@ abstract class GameController {
   static GAME_CREATED = 'GAME_CREATED';
   protected abstract gameService: GameService;
   protected abstract gameRepository: GameRepository;
+  protected abstract userRepository: UserRepository;
 
   public createGame = (ws: WebSocket, request: CreateGame): void => {
-    const user = userService.getUserByWebSocket(ws);
+    const user = this.userRepository.getUserByWebSocket(ws);
     const game = this.gameService.createGameWithPlayer(request.payload.playerName, user.id);
     this.response(GameController.GAME_CREATED, ws, game);
   };
@@ -28,7 +29,7 @@ abstract class GameController {
   };
 
   public joinGame = (ws: WebSocket, request: JoinGame): void => {
-    const user = userService.getUserByWebSocket(ws);
+    const user = this.userRepository.getUserByWebSocket(ws);
     const game = this.gameRepository.findGameById(request.payload.gameId);
     if (game !== undefined) {
       this.gameService.joinGame(game, request.payload.playerName, user.id);
@@ -37,7 +38,7 @@ abstract class GameController {
   };
 
   public startGame = (ws: WebSocket, request: StartGame): void => {
-    const user = userService.getUserByWebSocket(ws);
+    const user = this.userRepository.getUserByWebSocket(ws);
     const game = this.gameRepository.findGameById(request.payload.gameId);
     if (game !== undefined) {
       const player = this.gameService.findPlayerByUserId(game.players, user.id);
@@ -54,7 +55,7 @@ abstract class GameController {
 
   protected sendUpdateToPlayers(game: Game): void {
     const users = game.players
-      .map((player) => userService.getUserById(player.userId))
+      .map((player) => this.userRepository.getUserById(player.userId))
       .filter((user) => user !== undefined);
     users.forEach((user) => this.response(GameController.GAME_LOADED, user!.socket, game))
   }

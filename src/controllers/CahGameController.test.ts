@@ -1,16 +1,17 @@
 import CahGameController from "./CahGameController";
 import WebSocket from "ws";
-import {CREATE_GAME, JOIN_GAME, LOAD_GAME} from "../routes/webSocketParser";
-import {userService} from "../services/UserService";
+import {CREATE_GAME, JOIN_GAME, LOAD_GAME, START_GAME, VOTE} from "../routes/webSocketParser";
 import GameController from "./GameController";
 import {cahGameRepository} from "../repositories/CahGameRepository";
 import CahGame from "../models/cah/CahGame";
+import {userRepository} from "../repositories/UserRepository";
+import Player from "../models/Player";
 
 describe('CahGameController', () => {
 
   const cahGameController = new CahGameController();
   const ws = new WebSocket('ws://localhost:5000');
-  const user = userService.findOrCreateUser(ws);
+  const user = userRepository.findOrCreateUser(ws);
   const sendMock = jest.fn();
   ws.send = sendMock;
 
@@ -47,6 +48,20 @@ describe('CahGameController', () => {
     expect(game).toBeDefined();
     expect(game!.players).toHaveLength(1);
     expect(game!.players[0].name).toEqual(PLAYER_NAME);
+  });
+
+  it('should process a vote and move to next round', () => {
+    const GAME_ID = '99999';
+    const PLAYER_NAME = 'john';
+    const game = new CahGame(GAME_ID);
+    cahGameRepository.addGame(game);
+    const player = new Player(user.id, PLAYER_NAME);
+    game.addPlayer(player);
+    cahGameController.startGame(ws, {action: START_GAME, payload: {gameId: GAME_ID}});
+
+    cahGameController.vote(ws, {action: VOTE, payload: {gameId: GAME_ID, answer: 1}});
+
+    expect(game.previousRound!.answers[1].votes.length).toEqual(1);
   })
 
 });

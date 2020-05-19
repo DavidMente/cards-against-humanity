@@ -7,7 +7,9 @@ import {logger} from "./logger";
 import WebSocketRouter from "./routes/WebSocketRouter";
 import http from 'http';
 import * as net from "net";
-import {userService} from "./services/UserService";
+import {APP_CONFIG} from "./appConfig";
+import MessageDto from "./dto/MessageDto";
+import AuthenticationService from "./services/AuthenticationService";
 
 class App {
 
@@ -19,13 +21,13 @@ class App {
   constructor() {
     this.app = express();
     this.httpServer = http.createServer(this.app);
-    this.port = process.env.PORT || 5000;
+    this.port = APP_CONFIG.PORT;
     this.webSocketServer = new WebSocket.Server({noServer: true});
     this.initializeMiddlewares();
     this.initializeHtmlRoutes();
   }
 
-  public listen(): void {
+  public listen() {
     this.httpServer.listen(this.port, () => {
       logger.info(`🚀 App listening on port ${this.port}`);
     });
@@ -35,6 +37,10 @@ class App {
     return this.httpServer;
   }
 
+  public getWebSocketServer(): WebSocket.Server {
+    return this.webSocketServer;
+  }
+
   public setupWebSocketServer(): void {
     this.httpServer.on('upgrade', (request: http.IncomingMessage, socket: net.Socket, head: Buffer) => {
       this.webSocketServer.handleUpgrade(request, socket, head, (ws) => {
@@ -42,13 +48,13 @@ class App {
       });
     });
     new WebSocketRouter(this.webSocketServer);
-    logger.info(`Started webSocketServer`);
+    logger.info(`Initialized WebSocketServer`);
   }
 
   private handleAuthentication(request: http.IncomingMessage, ws: WebSocket) {
     const secret = request.headers['sec-websocket-protocol'];
-    const user = userService.findOrCreateUser(ws, secret as string | undefined);
-    ws.send(JSON.stringify({action: 'AUTHENTICATED', payload: {secret: user.secret}}));
+    const user = (new AuthenticationService).authenticate(secret as string | undefined, ws);
+    ws.send(JSON.stringify(new MessageDto('AUTHENTICATED', {secret: user.secret})));
     this.webSocketServer.emit('connection', ws, request);
   }
 

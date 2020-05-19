@@ -1,17 +1,18 @@
 import WebSocket from "ws";
 import {Vote} from "../routes/webSocketParser";
-import {userService} from "../services/UserService";
 import {PlayerStatus} from "../models/Player";
 import GameController from "./GameController";
 import {cahGameRepository} from "../repositories/CahGameRepository";
 import CahGame from "../models/cah/CahGame";
 import CahGameDto from "../dto/CahGameDto";
 import CahGameService from "../services/CahGameService";
+import {userRepository} from "../repositories/UserRepository";
 
 class CahGameController extends GameController {
 
   protected gameService = new CahGameService();
   protected gameRepository = cahGameRepository;
+  protected userRepository = userRepository;
 
   protected start(game: CahGame) {
     game.start();
@@ -19,7 +20,7 @@ class CahGameController extends GameController {
   }
 
   public vote = (ws: WebSocket, request: Vote): void => {
-    const user = userService.getUserByWebSocket(ws);
+    const user = this.userRepository.getUserByWebSocket(ws);
     const game = this.gameRepository.findGameById(request.payload.gameId);
     if (game !== undefined) {
       const player = this.gameService.findPlayerByUserId(game.players, user.id);

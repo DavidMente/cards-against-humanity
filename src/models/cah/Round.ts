@@ -6,7 +6,7 @@ class Round {
   public question: string;
   public answers: Answer[];
 
-  constructor(question: string, answers: Answer[], number: number = 0) {
+  constructor(question: string, answers: Answer[], number: number) {
     this.number = number;
     this.question = question;
     this.answers = answers;
