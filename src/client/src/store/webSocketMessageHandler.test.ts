@@ -20,9 +20,9 @@ describe('webSocketMessageHandler', () => {
   it('should process the successful authentication', () => {
     expect(reduxStore.getState().game.id).toBeNull();
     const SECRET = '9673';
-    const message = {action: AUTHENTICATED, payload: {secret: SECRET}};
+    const message = {action: AUTHENTICATED, payload: {user: {id: '123', secret: SECRET}}};
     reduxStore.dispatch({type: REDUX_WEBSOCKET_MESSAGE, meta: {}, payload: {message: JSON.stringify(message)}});
-    expect(authentication.getSecret()).toEqual(SECRET);
+    expect(authentication.getUser()!.secret).toEqual(SECRET);
   })
 
 });
