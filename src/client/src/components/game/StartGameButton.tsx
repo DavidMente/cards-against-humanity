@@ -1,24 +1,22 @@
 import React, {FunctionComponent} from "react";
-import {RootState} from "../store";
 import {connect, ConnectedProps} from "react-redux";
 import {send} from "@giantmachines/redux-websocket/dist";
-
-const mapState = (state: RootState) => {
-  return {
-    gameId: state.game.id,
-  }
-};
+import {START_GAME} from "../../store/game/types";
 
 const mapDispatch = {
-  startGame: (gameId: string) => send({action: 'START_GAME', payload: {gameId: gameId}})
+  startGame: (gameId: string) => send({action: START_GAME, payload: {gameId: gameId}})
 };
 
-const connector = connect(mapState, mapDispatch);
+const connector = connect(null, mapDispatch);
 
-const StartGameButton: FunctionComponent<ConnectedProps<typeof connector>> = ({gameId, startGame}) => {
+type StartGameButtonProps = {
+  gameId: string
+} & ConnectedProps<typeof connector>
+
+const StartGameButton: FunctionComponent<StartGameButtonProps> = ({gameId, startGame}) => {
 
   function start() {
-    if (gameId !== null && window.confirm('All players ready?')) {
+    if (window.confirm('All players ready?')) {
       startGame(gameId)
     }
   }

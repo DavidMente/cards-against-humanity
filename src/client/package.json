@@ -19,11 +19,22 @@
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",
-    "test": "react-scripts test --passWithNoTests",
+    "test": "react-scripts test",
+    "test:coverage": "npm test -- --watchAll=false --coverage",
     "eject": "react-scripts eject"
   },
   "eslintConfig": {
     "extends": "react-app"
+  },
+  "jest": {
+    "collectCoverageFrom": [
+      "**/*.{ts,tsx}",
+      "!**/node_modules/**",
+      "!src/index.tsx",
+      "!src/react-app-env.d.ts",
+      "!src/serviceWorker.ts",
+      "!**/__mocks__/**"
+    ]
   },
   "browserslist": {
     "production": [
@@ -44,6 +55,7 @@
     "@types/react-redux": "^7.1.8",
     "@types/react-router-dom": "^5.1.5",
     "@types/react-transition-group": "^4.2.4",
+    "@types/redux-mock-store": "^1.0.2",
     "bulma": "^0.8.2",
     "connected-react-router": "latest",
     "history": "latest",
@@ -52,6 +64,7 @@
     "react-redux": "^7.2.0",
     "react-router-dom": "latest",
     "react-transition-group": "latest",
-    "redux": "^4.0.5"
+    "redux": "^4.0.5",
+    "redux-mock-store": "^1.5.4"
   }
 }

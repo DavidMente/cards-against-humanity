@@ -3,11 +3,12 @@ import {RootState} from "../store";
 import {RouteComponentProps, withRouter} from 'react-router-dom';
 import {connect, ConnectedProps} from "react-redux";
 import PlayerCard from "./PlayerCard";
-import StartGameButton from "./StartGameButton";
+import StartGameButton from "./game/StartGameButton";
 import RoundComponent from "./RoundComponent";
 import ReactCSSTransitionGroup from 'react-addons-css-transition-group';
 import {send} from "@giantmachines/redux-websocket/dist";
-import JoinGameForm from "./JoinGameForm";
+import JoinGameForm from "./game/JoinGameForm";
+import {LOAD_GAME} from "../store/game/types";
 
 const mapState = (state: RootState) => {
 
@@ -23,7 +24,7 @@ const mapState = (state: RootState) => {
 
 const mapDispatch = {
   loadGame: (gameId: string) => send({
-    action: 'LOAD_GAME',
+    action: LOAD_GAME,
     payload: {gameId: gameId}
   }),
 };
@@ -53,7 +54,7 @@ const GameSection: FunctionComponent<ConnectedProps<typeof connector> & RouteCom
         )}
       </ReactCSSTransitionGroup>
       {!isPlayer && game.status === 'WAITING_FOR_PLAYERS' ? <JoinGameForm gameId={match.params.gameId} /> : ''}
-      {isPlayer && game.status === 'WAITING_FOR_PLAYERS' ? <StartGameButton /> : ''}
+      {isPlayer && game.status === 'WAITING_FOR_PLAYERS' ? <StartGameButton gameId={match.params.gameId} /> : ''}
       <ReactCSSTransitionGroup
         transitionName="slide-fade"
         transitionEnterTimeout={500}

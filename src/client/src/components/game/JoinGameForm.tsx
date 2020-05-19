@@ -2,10 +2,11 @@ import React, {FunctionComponent} from "react";
 import {send} from "@giantmachines/redux-websocket/dist";
 import {connect, ConnectedProps} from "react-redux";
 import PlayerForm from "./PlayerForm";
+import {JOIN_GAME} from "../../store/game/types";
 
 const mapDispatch = {
   joinGame: (gameId: string, playerName: string) => send({
-    action: 'JOIN_GAME',
+    action: JOIN_GAME,
     payload: {gameId: gameId, playerName: playerName}
   })
 };

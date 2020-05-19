@@ -1,10 +1,10 @@
 import React, {FunctionComponent, useState} from "react";
-import {Answer} from "../store/game/types";
+import {Answer, VOTE} from "../store/game/types";
 import {send} from "@giantmachines/redux-websocket/dist";
 import {connect, ConnectedProps} from "react-redux";
 
 const mapDispatch = {
-  sendVote: (gameId: string, index: number) => send({action: 'VOTE', payload: {gameId: gameId, answer: index}})
+  sendVote: (gameId: string, index: number) => send({action: VOTE, payload: {gameId: gameId, answer: index}})
 };
 
 const connector = connect(null, mapDispatch);

@@ -5,9 +5,9 @@ import {ConnectedRouter} from "connected-react-router";
 import {Route, Switch} from 'react-router-dom';
 import {history} from './store';
 import GameSection from "./components/GameSection";
-import Navbar from "./components/Navbar";
-import Footer from "./components/Footer";
-import CreateGameForm from "./components/CreateGameForm";
+import Navbar from "./components/layout/Navbar";
+import Footer from "./components/layout/Footer";
+import CreateGameForm from "./components/game/CreateGameForm";
 
 function App() {
   return (

@@ -1,4 +1,4 @@
-import {applyMiddleware, createStore, combineReducers} from 'redux';
+import {applyMiddleware, createStore, combineReducers, Store, Reducer, StoreEnhancer} from 'redux';
 import {gameReducer} from "./game/reducers";
 import {createBrowserHistory} from 'history';
 import {connectRouter, routerMiddleware} from 'connected-react-router';
@@ -6,17 +6,13 @@ import reduxWebsocket from '@giantmachines/redux-websocket';
 import {connect} from "@giantmachines/redux-websocket/dist";
 import {webSocketReducer} from "./websocket/reducers";
 import {WEBSOCKET_PREFIX} from "./websocket/types";
-import {messageHandler} from "./messageHandler";
-import {authentication} from "../authentication";
+import {webSocketMessageHandler} from "./webSocketMessageHandler";
+import {authentication} from "../services/authentication";
+import {reactConfig} from "../reactConfig";
 
 export const history = createBrowserHistory();
-const reduxWebsocketMiddleware = reduxWebsocket({
-  prefix: WEBSOCKET_PREFIX,
-  reconnectOnClose: true,
-  reconnectInterval: 1000
-});
 
-const rootReducer = combineReducers({
+export const rootReducer = combineReducers({
   game: gameReducer,
   router: connectRouter(history),
   webSocket: webSocketReducer,
@@ -24,17 +20,21 @@ const rootReducer = combineReducers({
 
 export type RootState = ReturnType<typeof rootReducer>
 
-export const store = createStore(rootReducer,
-  applyMiddleware(routerMiddleware(history), reduxWebsocketMiddleware, messageHandler));
+const reduxWebsocketMiddleware = reduxWebsocket({
+  prefix: WEBSOCKET_PREFIX,
+  reconnectOnClose: true,
+  reconnectInterval: 1000
+});
 
-let url: string;
+export const storeEnhancer = applyMiddleware(routerMiddleware(history), reduxWebsocketMiddleware, webSocketMessageHandler);
 
-if (process.env.NODE_ENV === 'production') {
-  url = 'wss://davids-cah-app.herokuapp.com';
-} else {
-  url = 'ws://localhost:5000'
+export function buildStore(reducer: Reducer, storeEnhancer: StoreEnhancer): Store {
+  return createStore(reducer, storeEnhancer);
 }
 
+export const store = buildStore(rootReducer, storeEnhancer);
+
+const webSocketUrl = reactConfig.WEBSOCKET;
 const secret = authentication.getSecret();
 const args = secret !== null ? [secret] : [];
-store.dispatch(connect(url, args));
+store.dispatch(connect(webSocketUrl, args));

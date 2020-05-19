@@ -1,20 +1,14 @@
 import React, {FunctionComponent} from "react";
-import {RootState} from "../store";
 import {connect, ConnectedProps} from "react-redux";
 import {send} from "@giantmachines/redux-websocket/dist";
 import PlayerForm from "./PlayerForm";
-
-const mapState = (state: RootState) => {
-  return {
-    gameId: state.game.id,
-  }
-};
+import {CREATE_GAME} from "../../store/game/types";
 
 const mapDispatch = {
-  createGame: (playerName: string) => send({action: 'CREATE_GAME', payload: {playerName: playerName}})
+  createGame: (playerName: string) => send({action: CREATE_GAME, payload: {playerName: playerName}})
 };
 
-const connector = connect(mapState, mapDispatch);
+const connector = connect(null, mapDispatch);
 
 const CreateGameForm: FunctionComponent<ConnectedProps<typeof connector>> = ({createGame}) =>
   <div>
