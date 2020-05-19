@@ -35,6 +35,6 @@ export interface Player {
   id: string,
   name: string,
   points: number,
-  secret: string | null,
+  userId: string,
   status: string
 }

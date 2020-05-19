@@ -6,6 +6,7 @@ import Game from "../models/Game";
 import {GameRepository} from "../repositories/GameRepository";
 import {GameDto} from "../dto/GameDto";
 import UserRepository from "../repositories/UserRepository";
+import User from "../models/User";
 
 abstract class GameController {
 
@@ -18,13 +19,14 @@ abstract class GameController {
   public createGame = (ws: WebSocket, request: CreateGame): void => {
     const user = this.userRepository.getUserByWebSocket(ws);
     const game = this.gameService.createGameWithPlayer(request.payload.playerName, user.id);
-    this.response(GameController.GAME_CREATED, ws, game);
+    this.response(GameController.GAME_CREATED, user, game);
   };
 
   public loadGame = (ws: WebSocket, request: LoadGame): void => {
+    const user = this.userRepository.getUserByWebSocket(ws);
     const game = this.gameRepository.findGameById(request.payload.gameId);
     if (game !== undefined) {
-      this.response(GameController.GAME_LOADED, ws, game);
+      this.response(GameController.GAME_LOADED, user, game);
     }
   };
 
@@ -57,16 +59,16 @@ abstract class GameController {
     const users = game.players
       .map((player) => this.userRepository.getUserById(player.userId))
       .filter((user) => user !== undefined);
-    users.forEach((user) => this.response(GameController.GAME_LOADED, user!.socket, game))
+    users.forEach((user) => this.response(GameController.GAME_LOADED, user!, game))
   }
 
-  public response(action: string, ws: WebSocket, game: Game): void {
-    const gameDto = this.gameToDto(game);
+  public response(action: string, user: User, game: Game): void {
+    const gameDto = this.gameToDto(game, user.id);
     const payload = new MessageDto(action, gameDto);
-    ws.send(JSON.stringify(payload));
+    user.socket.send(JSON.stringify(payload));
   }
 
-  abstract gameToDto(game: Game): GameDto
+  abstract gameToDto(game: Game, userId: string): GameDto
 
 }
 

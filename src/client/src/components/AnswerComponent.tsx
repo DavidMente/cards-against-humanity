@@ -20,17 +20,14 @@ type AnswerComponentProps = {
 const AnswerComponent: FunctionComponent<AnswerComponentProps> =
   ({answer, canPick, gameId, index, isWinningAnswer, sendVote}) => {
 
-    const [clicked, setClicked] = useState(false);
-
     function vote() {
       if (canPick) {
-        setClicked(true);
         sendVote(gameId, index);
       }
     }
 
     return <div
-      className={'box ' + (isWinningAnswer ? ' winning-answer' : '') + (canPick ? ' selectable-answer' : '') + (clicked ? ' selected-answer' : '')}
+      className={'box ' + (isWinningAnswer ? ' winning-answer' : '') + (canPick ? ' selectable-answer' : '')}
       onClick={() => vote()}
     >
       <div dangerouslySetInnerHTML={{__html: answer.text}} />

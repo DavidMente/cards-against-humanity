@@ -6,11 +6,11 @@ import AnswerComponent from "./AnswerComponent";
 type RoundComponentProps = {
   round: Round,
   gameId: string,
-  isActive: boolean,
+  isCurrentRound: boolean,
   player?: Player
 }
 
-const RoundComponent: FunctionComponent<RoundComponentProps> = ({round, gameId, player, isActive}) => {
+const RoundComponent: FunctionComponent<RoundComponentProps> = ({round, gameId, player, isCurrentRound}) => {
 
   let max: number = 0;
   let winningIndex: number | null = null;
@@ -24,8 +24,8 @@ const RoundComponent: FunctionComponent<RoundComponentProps> = ({round, gameId, 
     }
   });
 
-  return <div className={isActive ? 'box has-background-white-bis current-round' : 'previous-round'}>
-    {isActive ? <div className="subtitle is-6">
+  return <div className={isCurrentRound ? 'box has-background-white-bis current-round' : 'previous-round'}>
+    {isCurrentRound ? <div className="subtitle is-6">
       Round {round.number} - Choose the best answer!
     </div> : <div className={'subtitle is-6'}>Previous round:</div>}
     <QuestionComponent question={round.question} />

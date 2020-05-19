@@ -18,7 +18,7 @@ export const webSocketMessageHandler: Middleware = (api) => (next) => (action) =
         case GAME_CREATED:
           return history.push(`/game/${message.payload.id}`);
         case AUTHENTICATED:
-          return authentication.storeSecret(message.payload.secret);
+          return authentication.storeUser(message.payload.user);
         default:
       }
     }

@@ -29,7 +29,7 @@ class CahGameController extends GameController {
         const answer = game.currentRound.answers
           .find((answer, index) => index === request.payload.answer);
         if (answer !== undefined) {
-          answer.votes = [...answer.votes, {id: player.id, name: player.name}];
+          answer.votes = [...answer.votes, {id: player.userId, name: player.name}];
         }
       }
       const playersReady = game.players.filter((player) => player.status === PlayerStatus.READY).length === game.players.length;
@@ -44,8 +44,8 @@ class CahGameController extends GameController {
     }
   };
 
-  gameToDto(game: CahGame): CahGameDto {
-    return new CahGameDto(game);
+  gameToDto(game: CahGame, userId: string): CahGameDto {
+    return new CahGameDto(game, userId);
   }
 
 }

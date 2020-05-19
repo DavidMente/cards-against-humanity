@@ -11,6 +11,7 @@ import avatar8 from '../avatars/8.jpg';
 import avatar9 from '../avatars/9.jpg';
 import avatar10 from '../avatars/10.jpg';
 import Confetti from "./Confetti";
+import {authentication} from "../services/authentication";
 
 type PlayerCardProps = {
   player: Player,
@@ -18,11 +19,13 @@ type PlayerCardProps = {
 
 const PlayerCard: FunctionComponent<PlayerCardProps> = ({player}) => {
 
+  const user = authentication.getUser();
+  const userIsPlayer = user !== null && player.userId === user.id;
   const [points, setPoints] = useState(-999);
   const [hasScored, setHasScored] = useState(false);
 
   useEffect(() => {
-    if (player.points === points + 1 && player.secret !== null) {
+    if (player.points === points + 1 && userIsPlayer) {
       setHasScored(true);
       setTimeout(() => setHasScored(false), 1000);
     }
@@ -42,7 +45,7 @@ const PlayerCard: FunctionComponent<PlayerCardProps> = ({player}) => {
           </figure>
         </div>
         <div className="media-content">
-          <p className={"title is-6" + (player.secret !== null ? ' has-text-primary' : '')}>{player.name}</p>
+          <p className={"title is-6" + (userIsPlayer ? ' has-text-primary' : '')}>{player.name}</p>
           <p>Score: {player.points}</p>
           <p>{player.status === 'READY' ? <span className="tag is-success">Ready</span> : ''}</p>
         </div>

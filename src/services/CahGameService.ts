@@ -47,7 +47,7 @@ class CahGameService extends GameService {
 
   private addPointsForWinningAnswer(game: Game, winningAnswer: Answer) {
     winningAnswer.votes.forEach((vote) => {
-      const player = game.players.find((player) => player.id === vote.id);
+      const player = game.players.find((player) => player.userId === vote.id);
       if (player !== undefined) {
         player.points++
       }

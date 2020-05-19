@@ -1,11 +1,16 @@
+type User = {
+  id: string,
+  secret: string
+}
+
 export const authentication = {
 
-  storeSecret: (secret: string): void => {
-    localStorage.setItem('secret', secret);
+  storeUser: (user: User): void => {
+    localStorage.setItem('user', JSON.stringify(user));
   },
 
-  getSecret: (): string | null => {
-    return localStorage.getItem('secret') || null
+  getUser: (): User | null => {
+    return JSON.parse(localStorage.getItem('user') || 'null')
   }
 
 };

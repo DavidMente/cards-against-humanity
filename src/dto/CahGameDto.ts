@@ -1,9 +1,10 @@
 import {GameStatus} from "../models/Game";
-import Player, {PlayerStatus} from "../models/Player";
 import Round from "../models/cah/Round";
 import CahGame from "../models/cah/CahGame";
 import {PlayerDto} from "./PlayerDto";
 import {GameDto} from "./GameDto";
+import Answer from "../models/cah/Answer";
+import CahPlayerDto from "./CahPlayerDto";
 
 class CahGameDto implements GameDto {
 
@@ -13,7 +14,7 @@ class CahGameDto implements GameDto {
   previousRound: Round | null;
   currentRound: Round | null;
 
-  constructor(game: CahGame) {
+  constructor(game: CahGame, userId: string) {
     this.id = game.id;
     this.status = game.status;
     this.players = game.players.map((player) => new CahPlayerDto(player));
@@ -22,25 +23,20 @@ class CahGameDto implements GameDto {
     if (game.currentRound !== null) {
       this.currentRound = {
         ...game.currentRound,
-        answers: game.currentRound.answers.map((answer) => ({...answer, votes: []}))
+        answers: this.filterAnswersByUserId(game.currentRound.answers, userId)
       }
     }
   }
-}
 
-class CahPlayerDto implements PlayerDto {
-  id: string;
-  name: string;
-  points: number;
-  status: PlayerStatus;
-
-  constructor(player: Player) {
-    this.id = player.id;
-    this.name = player.name;
-    this.points = player.points;
-    this.status = player.status;
+  private filterAnswersByUserId(answers: Answer[], userId: string): Answer[] {
+    return answers.map((answer) => {
+      if (answer.votes.some((vote) => vote.id === userId)) {
+        return {...answer, votes: answer.votes.filter((vote) => vote.id === userId)}
+      } else {
+        return {...answer, votes: []}
+      }
+    })
   }
-
 }
 
 export default CahGameDto

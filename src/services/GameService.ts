@@ -5,6 +5,7 @@ import {GameRepository} from "../repositories/GameRepository";
 abstract class GameService {
 
   protected abstract createGame(id: string): Game;
+
   protected abstract gameRepository: GameRepository;
 
   public createGameWithPlayer(playerName: string, userId: string): Game {
@@ -30,8 +31,10 @@ abstract class GameService {
   }
 
   private static addNewPlayerToGame(userId: string, playerName: string, game: Game): void {
-    const newPlayer = new Player(userId, playerName);
-    game.addPlayer(newPlayer);
+    if (!game.players.some((player) => player.userId === userId)) {
+      const newPlayer = new Player(userId, playerName);
+      game.addPlayer(newPlayer);
+    }
   }
 
 }

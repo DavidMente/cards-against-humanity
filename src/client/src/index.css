@@ -29,7 +29,7 @@
   cursor: pointer;
 }
 
-.selectable-answer:hover, .selected-answer {
+.selectable-answer:hover {
   color: #00d1b2 !important;
   box-shadow: 0 0.5em 1em -0.125em rgba(10, 10, 10, 0.1), 0 0 0 1px #00d1b2 !important;
 }

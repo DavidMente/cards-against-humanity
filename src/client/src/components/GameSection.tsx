@@ -9,10 +9,14 @@ import ReactCSSTransitionGroup from 'react-addons-css-transition-group';
 import {send} from "@giantmachines/redux-websocket/dist";
 import JoinGameForm from "./game/JoinGameForm";
 import {LOAD_GAME} from "../store/game/types";
+import {authentication} from "../services/authentication";
 
 const mapState = (state: RootState) => {
 
-  const player = state.game.players.find((player) => player.secret !== null);
+  const user = authentication.getUser();
+  const player = user !== null
+    ? state.game.players.find((player) => player.userId === user.id)
+    : undefined;
 
   return {
     game: state.game,
@@ -62,10 +66,10 @@ const GameSection: FunctionComponent<ConnectedProps<typeof connector> & RouteCom
       >
         {game.currentRound !== null ?
           <RoundComponent round={game.currentRound} gameId={match.params.gameId} player={player}
-                          key={game.currentRound.number} isActive={true} /> : ''}
+                          key={game.currentRound.number} isCurrentRound /> : ''}
         {game.previousRound !== null ?
           <RoundComponent round={game.previousRound} gameId={match.params.gameId}
-                          key={game.previousRound.number} isActive={false} /> : ''}
+                          key={game.previousRound.number} isCurrentRound={false} /> : ''}
       </ReactCSSTransitionGroup>
     </div>
   };

@@ -35,6 +35,7 @@ export function buildStore(reducer: Reducer, storeEnhancer: StoreEnhancer): Stor
 export const store = buildStore(rootReducer, storeEnhancer);
 
 const webSocketUrl = reactConfig.WEBSOCKET;
-const secret = authentication.getSecret();
+const user = authentication.getUser();
+const secret = user !== null ? user.secret : null;
 const args = secret !== null ? [secret] : [];
 store.dispatch(connect(webSocketUrl, args));

@@ -54,7 +54,7 @@ class App {
   private handleAuthentication(request: http.IncomingMessage, ws: WebSocket) {
     const secret = request.headers['sec-websocket-protocol'];
     const user = (new AuthenticationService).authenticate(secret as string | undefined, ws);
-    ws.send(JSON.stringify(new MessageDto('AUTHENTICATED', {secret: user.secret})));
+    ws.send(JSON.stringify(new MessageDto('AUTHENTICATED', {user: {id: user.id, secret: user.secret}})));
     this.webSocketServer.emit('connection', ws, request);
   }
 
