@@ -1,3 +1,3 @@
 export const reactConfig = {
-  WEBSOCKET: process.env.SOCKET || 'ws://localhost:5000'
+  WEBSOCKET: process.env.REACT_APP_SOCKET || 'ws://localhost:5000'
 };
