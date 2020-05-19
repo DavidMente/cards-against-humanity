@@ -1,4 +1,3 @@
-import './loadEnv';
 import App from "./App";
 
 const app = new App();
