@@ -1,13 +1,9 @@
 language: node_js
 node_js:
   - 12
-script:
-  - npm install
-  - npm test
-  - cd $TRAVIS_BUILD_DIR/src/client
-  - npm install
-  - npm test
-  - cd $TRAVIS_BUILD_DIR
+cache:
+  directories:
+    - node_modules
 deploy:
   skip_cleanup: true
   provider: heroku
