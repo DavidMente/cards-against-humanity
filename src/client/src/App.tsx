@@ -8,20 +8,21 @@ import GameSection from "./components/GameSection";
 import Navbar from "./components/layout/Navbar";
 import Footer from "./components/layout/Footer";
 import CreateGameForm from "./components/game/CreateGameForm";
+import MainSection from "./components/layout/MainSection";
+import ConnectionIndicator from "./components/toast/ConnectionIndicator";
 
 function App() {
   return (
     <Provider store={store}>
       <ConnectedRouter history={history}>
         <Navbar />
-        <section className="section main-section">
-          <div className={'container'}>
-            <Switch>
-              <Route exact path={'/'} component={CreateGameForm} />
-              <Route exact path={'/game/:gameId'} component={GameSection} />
-            </Switch>
-          </div>
-        </section>
+        <MainSection>
+          <Switch>
+            <Route exact path={'/'} component={CreateGameForm} />
+            <Route exact path={'/game/:gameId'} component={GameSection} />
+          </Switch>
+        </MainSection>
+        <ConnectionIndicator />
         <Footer />
       </ConnectedRouter>
     </Provider>
