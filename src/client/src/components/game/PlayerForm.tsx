@@ -29,7 +29,7 @@ const PlayerForm: FunctionComponent<PlayerFormProps> = ({buttonText, action}) =>
 
   return <MiniFormLayout>
     <input type={'text'} onChange={(event) => handleChange(event.target.value)}
-           value={playerName} className={'input'} onKeyDown={handleKey}
+           value={playerName} className={'input'} onKeyDown={handleKey} maxLength={20}
            placeholder={'Enter your name'} ref={input} />
     <button onClick={() => action(playerName)} className={'button is-primary'}
             disabled={playerName === ''}>{buttonText}

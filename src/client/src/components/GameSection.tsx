@@ -2,7 +2,6 @@ import React, {FunctionComponent, useEffect} from "react";
 import {RootState} from "../store";
 import {RouteComponentProps, withRouter} from 'react-router-dom';
 import {connect, ConnectedProps} from "react-redux";
-import PlayerCard from "./PlayerCard";
 import StartGameButton from "./game/start/StartGameButton";
 import RoundComponent from "./RoundComponent";
 import ReactCSSTransitionGroup from 'react-addons-css-transition-group';
@@ -10,6 +9,7 @@ import {send} from "@giantmachines/redux-websocket/dist";
 import JoinGameForm from "./game/join/JoinGameForm";
 import {LOAD_GAME} from "../store/game/types";
 import {authentication} from "../services/authentication";
+import PlayerSection from "./players/PlayerSection";
 
 const mapState = (state: RootState) => {
 
@@ -45,18 +45,7 @@ const GameSection: FunctionComponent<ConnectedProps<typeof connector> & RouteCom
     }, [match.params.gameId, loadGame, webSocketConnected]);
 
     return <div>
-      <ReactCSSTransitionGroup
-        transitionName="slide-fade"
-        transitionEnterTimeout={500}
-        transitionLeaveTimeout={300}
-        className={'columns is-centered'}
-      >
-        {game.players.map((player) =>
-          <div className={'column is-one-quarter'} key={`${player.id}_container`}>
-            <PlayerCard player={player} key={player.id} />
-          </div>
-        )}
-      </ReactCSSTransitionGroup>
+      <PlayerSection players={game.players}/>
       {!isPlayer && game.status === 'WAITING_FOR_PLAYERS' ? <JoinGameForm gameId={match.params.gameId} /> : ''}
       {isPlayer && game.status === 'WAITING_FOR_PLAYERS' ? <StartGameButton gameId={match.params.gameId} /> : ''}
       <ReactCSSTransitionGroup
