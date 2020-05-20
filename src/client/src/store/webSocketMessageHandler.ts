@@ -7,6 +7,7 @@ import {authentication} from "../services/authentication";
 export const GAME_LOADED = 'GAME_LOADED';
 export const GAME_CREATED = 'GAME_CREATED';
 export const AUTHENTICATED = 'AUTHENTICATED';
+export const NOT_FOUND = 'NOT_FOUND';
 
 export const webSocketMessageHandler: Middleware = (api) => (next) => (action) => {
   if (action.type === REDUX_WEBSOCKET_MESSAGE) {
@@ -19,6 +20,8 @@ export const webSocketMessageHandler: Middleware = (api) => (next) => (action) =
           return history.push(`/game/${message.payload.id}`);
         case AUTHENTICATED:
           return authentication.storeUser(message.payload.user);
+        case NOT_FOUND:
+          return history.push('/');
         default:
       }
     }

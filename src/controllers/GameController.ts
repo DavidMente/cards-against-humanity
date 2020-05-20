@@ -12,6 +12,7 @@ abstract class GameController {
 
   static GAME_LOADED = 'GAME_LOADED';
   static GAME_CREATED = 'GAME_CREATED';
+  static NOT_FOUND = 'NOT_FOUND';
   protected abstract gameService: GameService;
   protected abstract gameRepository: GameRepository;
   protected abstract userRepository: UserRepository;
@@ -27,7 +28,14 @@ abstract class GameController {
     const game = this.gameRepository.findGameById(request.payload.gameId);
     if (game !== undefined) {
       this.response(GameController.GAME_LOADED, user, game);
+    } else {
+      this.notFound(ws);
     }
+  };
+
+  private notFound = (ws: WebSocket): void => {
+    const payload = new MessageDto(GameController.NOT_FOUND);
+    ws.send(JSON.stringify(payload));
   };
 
   public joinGame = (ws: WebSocket, request: JoinGame): void => {
@@ -36,6 +44,8 @@ abstract class GameController {
     if (game !== undefined) {
       this.gameService.joinGame(game, request.payload.playerName, user.id);
       this.sendUpdateToPlayers(game);
+    } else {
+      this.notFound(ws);
     }
   };
 
@@ -48,6 +58,8 @@ abstract class GameController {
         this.start(game);
         this.sendUpdateToPlayers(game);
       }
+    } else {
+      this.notFound(ws);
     }
   };
 
