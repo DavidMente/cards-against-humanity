@@ -1,8 +1,8 @@
 import React, {FunctionComponent} from "react";
 import {connect, ConnectedProps} from "react-redux";
 import {send} from "@giantmachines/redux-websocket/dist";
-import PlayerForm from "./PlayerForm";
-import {CREATE_GAME} from "../../store/game/types";
+import PlayerForm from "../PlayerForm";
+import {CREATE_GAME} from "../../../store/game/types";
 
 const mapDispatch = {
   createGame: (playerName: string) => send({action: CREATE_GAME, payload: {playerName: playerName}})

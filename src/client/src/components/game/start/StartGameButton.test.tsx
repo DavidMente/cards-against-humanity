@@ -3,7 +3,7 @@ import StartGameButton from "./StartGameButton";
 import React from "react";
 import configureStore from 'redux-mock-store'
 import {Provider} from "react-redux";
-import {START_GAME} from "../../store/game/types";
+import {START_GAME} from "../../../store/game/types";
 
 describe('StartGameButton', () => {
 

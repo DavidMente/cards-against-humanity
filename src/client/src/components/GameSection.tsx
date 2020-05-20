@@ -3,11 +3,11 @@ import {RootState} from "../store";
 import {RouteComponentProps, withRouter} from 'react-router-dom';
 import {connect, ConnectedProps} from "react-redux";
 import PlayerCard from "./PlayerCard";
-import StartGameButton from "./game/StartGameButton";
+import StartGameButton from "./game/start/StartGameButton";
 import RoundComponent from "./RoundComponent";
 import ReactCSSTransitionGroup from 'react-addons-css-transition-group';
 import {send} from "@giantmachines/redux-websocket/dist";
-import JoinGameForm from "./game/JoinGameForm";
+import JoinGameForm from "./game/join/JoinGameForm";
 import {LOAD_GAME} from "../store/game/types";
 import {authentication} from "../services/authentication";
 

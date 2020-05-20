@@ -1,0 +1,22 @@
+.mini-form {
+  display: flex;
+  justify-content: center;
+  .button-box {
+    max-width: 400px;
+    > input, button {
+      width: 100%;
+    }
+    div {
+      text-align: center;
+    }
+    input {
+      text-align: center;
+      border-bottom-left-radius: 0;
+      border-bottom-right-radius: 0;
+    }
+    button {
+      border-top-left-radius: 0;
+      border-top-right-radius: 0;
+    }
+  }
+}

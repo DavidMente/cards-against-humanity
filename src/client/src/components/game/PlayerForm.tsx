@@ -1,4 +1,5 @@
 import React, {FunctionComponent, useEffect, useRef, useState} from "react";
+import MiniFormLayout from "../layout/MiniFormLayout";
 
 type PlayerFormProps = {
   buttonText: string,
@@ -26,16 +27,14 @@ const PlayerForm: FunctionComponent<PlayerFormProps> = ({buttonText, action}) =>
     setPlayerName(value);
   }
 
-  return <div className={'columns is-centered'}>
-    <div className={'box button-box'}>
-      <input type={'text'} onChange={(event) => handleChange(event.target.value)}
-             value={playerName} className={'input'} onKeyDown={handleKey}
-             placeholder={'Enter your name'} ref={input} />
-      <button onClick={() => action(playerName)} className={'button is-primary'}
-              disabled={playerName === ''}>{buttonText}
-      </button>
-    </div>
-  </div>
+  return <MiniFormLayout>
+    <input type={'text'} onChange={(event) => handleChange(event.target.value)}
+           value={playerName} className={'input'} onKeyDown={handleKey}
+           placeholder={'Enter your name'} ref={input} />
+    <button onClick={() => action(playerName)} className={'button is-primary'}
+            disabled={playerName === ''}>{buttonText}
+    </button>
+  </MiniFormLayout>
 };
 
 export default PlayerForm;

@@ -3,7 +3,7 @@ import React from "react";
 import configureStore from 'redux-mock-store'
 import {Provider} from "react-redux";
 import JoinGameForm from "./JoinGameForm";
-import {JOIN_GAME} from "../../store/game/types";
+import {JOIN_GAME} from "../../../store/game/types";
 
 describe('JoinGameForm', () => {
 

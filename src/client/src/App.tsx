@@ -7,7 +7,7 @@ import {history} from './store';
 import GameSection from "./components/GameSection";
 import Navbar from "./components/layout/Navbar";
 import Footer from "./components/layout/Footer";
-import CreateGameForm from "./components/game/CreateGameForm";
+import CreateGameForm from "./components/game/create/CreateGameForm";
 import MainSection from "./components/layout/MainSection";
 import ConnectionIndicator from "./components/toast/ConnectionIndicator";
 

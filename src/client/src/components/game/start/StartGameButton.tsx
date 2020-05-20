@@ -1,7 +1,8 @@
 import React, {FunctionComponent} from "react";
 import {connect, ConnectedProps} from "react-redux";
 import {send} from "@giantmachines/redux-websocket/dist";
-import {START_GAME} from "../../store/game/types";
+import {START_GAME} from "../../../store/game/types";
+import MiniFormLayout from "../../layout/MiniFormLayout";
 
 const mapDispatch = {
   startGame: (gameId: string) => send({action: START_GAME, payload: {gameId: gameId}})
@@ -21,12 +22,12 @@ const StartGameButton: FunctionComponent<StartGameButtonProps> = ({gameId, start
     }
   }
 
-  return <div className={'columns is-centered is-vcentered'}>
-    <div className={'link-info'}>link:</div>
-    <input className={'input input-link'} value={window.location.href} readOnly
+  return <MiniFormLayout>
+    <div style={{marginBottom: '5px'}}>Send this link to your friends:</div>
+    <input className={'input has-background-light has-text-grey'} value={window.location.href} readOnly
            onFocus={(event) => event.target.select()} />
     <button onClick={() => start()} className={'button is-primary'}>Start the game</button>
-  </div>
+  </MiniFormLayout>
 };
 
 export default connector(StartGameButton);

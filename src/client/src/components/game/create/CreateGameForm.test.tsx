@@ -2,7 +2,7 @@ import {render, fireEvent} from '@testing-library/react';
 import React from "react";
 import configureStore from 'redux-mock-store'
 import {Provider} from "react-redux";
-import {CREATE_GAME} from "../../store/game/types";
+import {CREATE_GAME} from "../../../store/game/types";
 import CreateGameForm from "./CreateGameForm";
 
 describe('CreateGameForm', () => {
