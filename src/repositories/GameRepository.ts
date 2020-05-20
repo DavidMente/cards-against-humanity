@@ -1,7 +1,7 @@
 import Game from "../models/Game";
 
 export interface GameRepository {
-  addGame(game: Game): void
+  createGame(): Game
 
   getGames(): Game[]
 

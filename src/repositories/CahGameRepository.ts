@@ -6,7 +6,14 @@ class CahGameRepository implements GameRepository {
 
   private games: CahGame[] = [];
 
-  public addGame(game: CahGame): void {
+  public createGame(): CahGame {
+    const id = (100 + this.games.length).toString();
+    const game = new CahGame(id);
+    this.addGame(game);
+    return game;
+  }
+
+  private addGame(game: CahGame): void {
     this.games = [...this.games, game]
   }
 
@@ -14,7 +21,7 @@ class CahGameRepository implements GameRepository {
     return this.games.find((game) => game.id === gameId);
   }
 
-  getGames(): Game[] {
+  public getGames(): Game[] {
     return this.games;
   }
 

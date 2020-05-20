@@ -26,8 +26,7 @@ describe('CahGameController', () => {
   });
 
   it('should load an existing game', () => {
-    const GAME_ID = '999';
-    cahGameRepository.addGame(new CahGame(GAME_ID));
+    const GAME_ID = cahGameRepository.createGame().id;
 
     cahGameController.loadGame(ws, {action: LOAD_GAME, payload: {gameId: GAME_ID}});
 
@@ -35,10 +34,16 @@ describe('CahGameController', () => {
     expect(response.action).toEqual(GameController.GAME_LOADED);
   });
 
+  it('should return NOT_FOUND', () => {
+    cahGameController.loadGame(ws, {action: LOAD_GAME, payload: {gameId: 'unknown'}});
+
+    const response = JSON.parse(sendMock.mock.calls[0]);
+    expect(response.action).toEqual(GameController.NOT_FOUND);
+  });
+
   it('should join an existing game', () => {
-    const GAME_ID = '9999';
     const PLAYER_NAME = 'john';
-    cahGameRepository.addGame(new CahGame(GAME_ID));
+    const GAME_ID = cahGameRepository.createGame().id;
 
     cahGameController.joinGame(ws, {action: JOIN_GAME, payload: {gameId: GAME_ID, playerName: PLAYER_NAME}});
 
@@ -51,17 +56,15 @@ describe('CahGameController', () => {
   });
 
   it('should process a vote and move to next round', () => {
-    const GAME_ID = '99999';
     const PLAYER_NAME = 'john';
-    const game = new CahGame(GAME_ID);
-    cahGameRepository.addGame(game);
+    const game = cahGameRepository.createGame();
     const player = new Player(user.id, PLAYER_NAME);
     game.addPlayer(player);
-    cahGameController.startGame(ws, {action: START_GAME, payload: {gameId: GAME_ID}});
+    cahGameController.startGame(ws, {action: START_GAME, payload: {gameId: game.id}});
 
-    cahGameController.vote(ws, {action: VOTE, payload: {gameId: GAME_ID, answer: 1}});
+    cahGameController.vote(ws, {action: VOTE, payload: {gameId: game.id, answer: 1}});
 
     expect(game.previousRound!.answers[1].votes.length).toEqual(1);
-  })
+  });
 
 });

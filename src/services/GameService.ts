@@ -4,15 +4,11 @@ import {GameRepository} from "../repositories/GameRepository";
 
 abstract class GameService {
 
-  protected abstract createGame(id: string): Game;
-
   protected abstract gameRepository: GameRepository;
 
   public createGameWithPlayer(playerName: string, userId: string): Game {
-    const newId = this.gameRepository.getGames.length + 100;
-    const newGame = this.createGame(newId.toString());
+    const newGame = this.gameRepository.createGame();
     GameService.addNewPlayerToGame(userId, playerName, newGame);
-    this.gameRepository.addGame(newGame);
     return newGame;
   }
 

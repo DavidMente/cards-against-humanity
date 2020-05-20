@@ -31,7 +31,11 @@ class UserRepository {
     return this.users.find((user) => user.id === userId);
   }
 
+  public getUsers(): User[] {
+    return this.users
+  }
 }
+
 
 export default UserRepository;
 

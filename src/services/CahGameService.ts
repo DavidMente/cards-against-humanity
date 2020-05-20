@@ -53,11 +53,6 @@ class CahGameService extends GameService {
       }
     })
   }
-
-  protected createGame(id: string): Game {
-    return new CahGame(id);
-  }
-
 }
 
 export default CahGameService;
