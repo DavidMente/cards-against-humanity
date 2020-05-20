@@ -6,6 +6,8 @@ describe('UserRepository', () => {
   const ws = new WebSocket('ws://localhost:5000');
   const userRepositoryFactory = () => new UserRepository();
 
+  afterAll(() => ws.close());
+
   it('should create a new user', () => {
     const userRepository = userRepositoryFactory();
 
