@@ -1,5 +1,4 @@
 import CahGameRepository from "./CahGameRepository";
-import CahGame from "../models/cah/CahGame";
 
 describe('CahGameRepository', () => {
 
@@ -9,9 +8,9 @@ describe('CahGameRepository', () => {
     expect(repository.getGames()).toEqual([]);
   });
 
-  it('should add a game', () => {
-    repository.addGame(new CahGame('123'))
-    expect(repository.getGames()[0].id).toEqual('123');
+  it('should create a game', () => {
+    const game = repository.createGame();
+    expect(repository.getGames()[0].id).toEqual(game.id);
   })
 
 });
