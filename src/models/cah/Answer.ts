@@ -7,6 +7,7 @@ class Answer {
 
   public text: string;
   public votes: PlayerAnswer[] = [];
+  public isWinner: boolean = false;
 
   constructor(text: string) {
     this.text = text;

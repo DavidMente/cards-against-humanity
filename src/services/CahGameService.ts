@@ -25,6 +25,17 @@ class CahGameService extends GameService {
   }
 
   public processCurrentRound(game: CahGame): void {
+    const winningAnswer = this.determineWinningAnswer(game);
+    if (winningAnswer !== null) {
+      winningAnswer.isWinner = true;
+      this.addPointsForWinningAnswer(game, winningAnswer);
+    }
+    game.previousRound = game.currentRound;
+    game.currentRound = null;
+    this.setPlayersNotReady(game);
+  }
+
+  private determineWinningAnswer(game: CahGame): Answer | null {
     const round = game.currentRound!;
     const voteCounts = round.answers.map((answer) => answer.votes.length);
     let max = 0, winningIndex = null;
@@ -37,15 +48,13 @@ class CahGameService extends GameService {
       }
     });
     if (winningIndex !== null) {
-      const winningAnswer = round.answers[winningIndex];
-      this.addPointsForWinningAnswer(game, winningAnswer);
+      return round.answers[winningIndex];
+    } else {
+      return null;
     }
-    game.previousRound = game.currentRound;
-    game.currentRound = null;
-    this.setPlayersNotReady(game);
   }
 
-  private addPointsForWinningAnswer(game: Game, winningAnswer: Answer) {
+  private addPointsForWinningAnswer(game: CahGame, winningAnswer: Answer) {
     winningAnswer.votes.forEach((vote) => {
       const player = game.players.find((player) => player.userId === vote.id);
       if (player !== undefined) {

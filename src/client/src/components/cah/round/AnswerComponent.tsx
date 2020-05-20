@@ -1,5 +1,5 @@
 import React, {FunctionComponent, useState} from "react";
-import {Answer, VOTE} from "../store/game/types";
+import {Answer, VOTE} from "../../../store/game/types";
 import {send} from "@giantmachines/redux-websocket/dist";
 import {connect, ConnectedProps} from "react-redux";
 
@@ -14,11 +14,10 @@ type AnswerComponentProps = {
   index: number,
   gameId: string,
   canPick: boolean,
-  isWinningAnswer: boolean,
 } & ConnectedProps<typeof connector>
 
 const AnswerComponent: FunctionComponent<AnswerComponentProps> =
-  ({answer, canPick, gameId, index, isWinningAnswer, sendVote}) => {
+  ({answer, canPick, gameId, index, sendVote}) => {
 
     function vote() {
       if (canPick) {
@@ -27,13 +26,13 @@ const AnswerComponent: FunctionComponent<AnswerComponentProps> =
     }
 
     return <div
-      className={'box ' + (isWinningAnswer ? ' winning-answer' : '') + (canPick ? ' selectable-answer' : '')}
+      className={'box ' + (answer.isWinner ? ' winning-answer' : '') + (canPick ? ' selectable-answer' : '')}
       onClick={() => vote()}
     >
       <div dangerouslySetInnerHTML={{__html: answer.text}} />
       {answer.votes.map((vote) =>
         <span key={vote.id}
-              className={'player-tag tag' + (isWinningAnswer ? ' is-primary' : ' is-danger')}>{vote.name}</span>)}
+              className={'player-tag tag' + (answer.isWinner ? ' is-primary' : ' is-danger')}>{vote.name}</span>)}
     </div>;
   };
 

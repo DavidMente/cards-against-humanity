@@ -28,7 +28,8 @@ export interface Round {
 
 export interface Answer {
   text: string,
-  votes: { id: string, name: string }[]
+  votes: { id: string, name: string }[],
+  isWinner: boolean
 }
 
 export interface Player {

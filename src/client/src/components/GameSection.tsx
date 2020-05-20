@@ -3,7 +3,7 @@ import {RootState} from "../store";
 import {RouteComponentProps, withRouter} from 'react-router-dom';
 import {connect, ConnectedProps} from "react-redux";
 import StartGameButton from "./game/start/StartGameButton";
-import RoundComponent from "./RoundComponent";
+import RoundComponent from "./cah/round/RoundComponent";
 import ReactCSSTransitionGroup from 'react-addons-css-transition-group';
 import {send} from "@giantmachines/redux-websocket/dist";
 import JoinGameForm from "./game/join/JoinGameForm";
