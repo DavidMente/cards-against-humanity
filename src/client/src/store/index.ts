@@ -22,8 +22,6 @@ export type RootState = ReturnType<typeof rootReducer>
 
 const reduxWebsocketMiddleware = reduxWebsocket({
   prefix: WEBSOCKET_PREFIX,
-  reconnectOnClose: true,
-  reconnectInterval: 1000
 });
 
 export const storeEnhancer = applyMiddleware(routerMiddleware(history), reduxWebsocketMiddleware, webSocketMessageHandler);
@@ -34,8 +32,12 @@ export function buildStore(reducer: Reducer, storeEnhancer: StoreEnhancer): Stor
 
 export const store = buildStore(rootReducer, storeEnhancer);
 
-const webSocketUrl = reactConfig.WEBSOCKET;
-const user = authentication.getUser();
-const secret = user !== null ? user.secret : null;
-const args = secret !== null ? [secret] : [];
-store.dispatch(connect(webSocketUrl, args));
+export const connectWebSocket = () => {
+  const webSocketUrl = reactConfig.WEBSOCKET;
+  const user = authentication.getUser();
+  const secret = user !== null ? user.secret : null;
+  const args = secret !== null ? [secret] : [];
+  store.dispatch(connect(webSocketUrl, args));
+};
+
+connectWebSocket();
