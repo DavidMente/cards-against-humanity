@@ -1,6 +1,7 @@
 import CahGame from "../models/cah/CahGame";
 import {GameRepository} from "./GameRepository";
 import Game from "../models/Game";
+import NotFoundException from "../exceptions/NotFoundException";
 
 class CahGameRepository implements GameRepository {
 
@@ -17,8 +18,13 @@ class CahGameRepository implements GameRepository {
     this.games = [...this.games, game]
   }
 
-  public findGameById(gameId: string): CahGame | undefined {
-    return this.games.find((game) => game.id === gameId);
+  public findGameById(gameId: string): CahGame {
+    const game = this.games.find((game) => game.id === gameId);
+    if (game === undefined) {
+      throw new NotFoundException(`Game with ID ${gameId} not found`);
+    } else {
+      return game;
+    }
   }
 
   public getGames(): Game[] {

@@ -7,6 +7,7 @@ import CahGame from "../models/cah/CahGame";
 import CahGameDto from "../dto/CahGameDto";
 import CahGameService from "../services/CahGameService";
 import {userRepository} from "../repositories/UserRepository";
+import ExceptionController from "./ExceptionController";
 
 class CahGameController extends GameController {
 
@@ -20,9 +21,9 @@ class CahGameController extends GameController {
   }
 
   public vote = (ws: WebSocket, request: Vote): void => {
-    const user = this.userRepository.getUserByWebSocket(ws);
-    const game = this.gameRepository.findGameById(request.payload.gameId);
-    if (game !== undefined) {
+    try {
+      const user = this.userRepository.getUserByWebSocket(ws);
+      const game = this.gameRepository.findGameById(request.payload.gameId);
       const player = this.gameService.findPlayerByUserId(game.players, user.id);
       if (player !== undefined && player.status === PlayerStatus.NOT_READY && game.currentRound !== null) {
         player.status = PlayerStatus.READY;
@@ -41,6 +42,8 @@ class CahGameController extends GameController {
       } else {
         this.sendUpdateToPlayers(game);
       }
+    } catch (exception) {
+      ExceptionController.handle(ws, exception);
     }
   };
 

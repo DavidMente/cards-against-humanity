@@ -6,6 +6,7 @@ import {cahGameRepository} from "../repositories/CahGameRepository";
 import CahGame from "../models/cah/CahGame";
 import {userRepository} from "../repositories/UserRepository";
 import Player from "../models/Player";
+import {NOT_FOUND} from "../exceptions/NotFoundException";
 
 describe('CahGameController', () => {
 
@@ -38,7 +39,7 @@ describe('CahGameController', () => {
     cahGameController.loadGame(ws, {action: LOAD_GAME, payload: {gameId: 'unknown'}});
 
     const response = JSON.parse(sendMock.mock.calls[0]);
-    expect(response.action).toEqual(GameController.NOT_FOUND);
+    expect(response.action).toEqual(NOT_FOUND);
   });
 
   it('should join an existing game', () => {

@@ -5,5 +5,5 @@ export interface GameRepository {
 
   getGames(): Game[]
 
-  findGameById(gameId: string): Game | undefined
+  findGameById(gameId: string): Game
 }
