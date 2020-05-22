@@ -14,10 +14,11 @@ type AnswerComponentProps = {
   index: number,
   gameId: string,
   canPick: boolean,
+  isCurrentRound: boolean,
 } & ConnectedProps<typeof connector>
 
 const AnswerComponent: FunctionComponent<AnswerComponentProps> =
-  ({answer, canPick, gameId, index, sendVote}) => {
+  ({answer, canPick, gameId, index, sendVote, isCurrentRound}) => {
 
     function vote() {
       if (canPick) {
@@ -32,7 +33,7 @@ const AnswerComponent: FunctionComponent<AnswerComponentProps> =
       <div dangerouslySetInnerHTML={{__html: answer.text}} />
       {answer.votes.map((vote) =>
         <span key={vote.id}
-              className={'player-tag tag' + (answer.isWinner ? ' is-primary' : ' is-danger')}>{vote.name}</span>)}
+              className={'player-tag tag' + (answer.isWinner ? ' is-primary' : (isCurrentRound ? ' is-warning' : 'is-danger'))}>{vote.name}</span>)}
     </div>;
   };
 

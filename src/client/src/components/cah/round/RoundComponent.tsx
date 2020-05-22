@@ -20,7 +20,7 @@ const RoundComponent: FunctionComponent<RoundComponentProps> = ({round, gameId, 
     <div className={'columns is-vcentered'}>
       {round.answers.map((answer, index) =>
         <div className={'column'}>
-          <AnswerComponent index={index} answer={answer} key={index}
+          <AnswerComponent index={index} answer={answer} key={index} isCurrentRound={isCurrentRound}
                            canPick={player !== undefined && player.status === 'NOT_READY'} gameId={gameId} />
         </div>
       )}
