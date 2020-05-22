@@ -10,6 +10,7 @@ import JoinGameForm from "./game/join/JoinGameForm";
 import {LOAD_GAME} from "../store/game/types";
 import {authentication} from "../services/authentication";
 import PlayerSection from "./players/PlayerSection";
+import Confetti from "./Confetti";
 
 const mapState = (state: RootState) => {
 
@@ -48,6 +49,7 @@ const GameSection: FunctionComponent<ConnectedProps<typeof connector> & RouteCom
       <PlayerSection players={game.players}/>
       {!isPlayer && game.status === 'WAITING_FOR_PLAYERS' ? <JoinGameForm gameId={match.params.gameId} /> : ''}
       {isPlayer && game.status === 'WAITING_FOR_PLAYERS' ? <StartGameButton gameId={match.params.gameId} /> : ''}
+      <Confetti />
       <ReactCSSTransitionGroup
         transitionName="slide-fade"
         transitionEnterTimeout={500}
