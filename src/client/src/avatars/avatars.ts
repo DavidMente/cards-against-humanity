@@ -8,5 +8,8 @@ import avatar7 from "./7.jpg";
 import avatar8 from "./8.jpg";
 import avatar9 from "./9.jpg";
 import avatar10 from "./10.jpg";
+import avatar11 from "./11.jpg";
+import avatar12 from "./12.jpg";
 
-export const avatars = [avatar1, avatar2, avatar3, avatar4, avatar5, avatar6, avatar7, avatar8, avatar9, avatar10];
+export const avatars = [avatar1, avatar2, avatar3, avatar4, avatar5, avatar6, avatar7, avatar8, avatar9, avatar10,
+  avatar11, avatar12];
