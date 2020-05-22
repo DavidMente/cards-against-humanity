@@ -12,8 +12,7 @@ export function userHasWon(user: User | null, previousRound: Round | null, curre
     if (previousRound !== null && currentRound === null) {
       const winningAnswer = previousRound.answers.find((answer) => answer.isWinner);
       if (winningAnswer !== undefined) {
-        hasWon = previousRound.answers
-          .some((answer) => answer.votes.some((vote) => vote.id === userId))
+        hasWon = winningAnswer.votes.some((vote) => vote.id === userId)
       }
     }
   }
