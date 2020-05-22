@@ -36,7 +36,7 @@ const Confetti: FunctionComponent<ConnectedProps<typeof connector>> = ({hasWon})
     duration: 5000,
     dragFriction: 0.1,
     stagger: 0,
-    startVelocity: 30,
+    startVelocity: 45,
     elementCount: 100,
     colors: ["#a864fd", "#29cdff", "#78ff44", "#ff718d", "#fdff6a"]
   };
