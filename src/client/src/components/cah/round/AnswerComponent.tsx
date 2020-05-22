@@ -33,7 +33,7 @@ const AnswerComponent: FunctionComponent<AnswerComponentProps> =
       <div dangerouslySetInnerHTML={{__html: answer.text}} />
       {answer.votes.map((vote) =>
         <span key={vote.id}
-              className={'player-tag tag' + (answer.isWinner ? ' is-primary' : (isCurrentRound ? ' is-warning' : 'is-danger'))}>{vote.name}</span>)}
+              className={'player-tag tag' + (answer.isWinner ? ' is-primary' : (isCurrentRound ? ' is-warning' : ' is-danger'))}>{vote.name}</span>)}
     </div>;
   };
 
