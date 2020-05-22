@@ -3,6 +3,7 @@ import {connect, ConnectedProps} from "react-redux";
 import {send} from "@giantmachines/redux-websocket/dist";
 import {START_GAME} from "../../../store/game/types";
 import MiniFormLayout from "../../layout/MiniFormLayout";
+import WhatsAppLink from "../../WhatsAppLink";
 
 const mapDispatch = {
   startGame: (gameId: string) => send({action: START_GAME, payload: {gameId: gameId}})
@@ -22,10 +23,13 @@ const StartGameButton: FunctionComponent<StartGameButtonProps> = ({gameId, start
     }
   }
 
+  const link = window.location.href;
+
   return <MiniFormLayout>
     <div style={{marginBottom: '5px'}}>Send this link to your friends:</div>
-    <input className={'input has-background-light has-text-grey'} value={window.location.href} readOnly
+    <input className={'input has-background-light has-text-grey link-input'} value={link} readOnly
            onFocus={(event) => event.target.select()} />
+    <WhatsAppLink text={link} />
     <button onClick={() => start()} className={'button is-primary'}>Start the game</button>
   </MiniFormLayout>
 };

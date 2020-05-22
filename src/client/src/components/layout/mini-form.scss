@@ -14,6 +14,14 @@
       border-bottom-left-radius: 0;
       border-bottom-right-radius: 0;
       margin-bottom: 2px;
+      &.link-input {
+        width: calc(100% - 2.6rem);
+      }
+    }
+    .fa-whatsapp-square {
+      color: #25D366;
+      width: 2.6rem !important;
+      height: 2.6rem !important;
     }
     button {
       border-top-left-radius: 0;

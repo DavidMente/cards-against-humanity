@@ -1,4 +1,4 @@
-import React, {FunctionComponent, useState} from "react";
+import React, {FunctionComponent} from "react";
 import {Answer, VOTE} from "../../../store/game/types";
 import {send} from "@giantmachines/redux-websocket/dist";
 import {connect, ConnectedProps} from "react-redux";
