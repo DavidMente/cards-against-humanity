@@ -1,7 +1,7 @@
-import CahGame from "../models/cah/CahGame";
-import {GameRepository} from "./GameRepository";
-import Game from "../models/Game";
-import NotFoundException from "../exceptions/NotFoundException";
+import CahGame from "../../models/cah/CahGame";
+import {GameRepository} from "../GameRepository";
+import Game from "../../models/Game";
+import NotFoundException from "../../exceptions/NotFoundException";
 
 class CahGameRepository implements GameRepository {
 

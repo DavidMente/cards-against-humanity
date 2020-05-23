@@ -9,11 +9,13 @@ import {WEBSOCKET_PREFIX} from "./websocket/types";
 import {webSocketMessageHandler} from "./webSocketMessageHandler";
 import {authentication} from "../services/authentication";
 import {reactConfig} from "../reactConfig";
+import {drawGameReducer} from "./drawGame/reducers";
 
 export const history = createBrowserHistory();
 
 export const rootReducer = combineReducers({
   game: gameReducer,
+  drawGame: drawGameReducer,
   router: connectRouter(history),
   webSocket: webSocketReducer,
 });

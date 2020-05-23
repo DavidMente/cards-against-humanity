@@ -1,9 +1,9 @@
 import {GameStatus} from "../models/Game";
-import Round from "../models/cah/Round";
+import CahRound from "../models/cah/CahRound";
 import CahGame from "../models/cah/CahGame";
 import {PlayerDto} from "./PlayerDto";
 import {GameDto} from "./GameDto";
-import Answer from "../models/cah/Answer";
+import CahAnswer from "../models/cah/CahAnswer";
 import CahPlayerDto from "./CahPlayerDto";
 
 class CahGameDto implements GameDto {
@@ -11,8 +11,8 @@ class CahGameDto implements GameDto {
   id: string;
   status: GameStatus;
   players: PlayerDto[];
-  previousRound: Round | null;
-  currentRound: Round | null;
+  previousRound: CahRound | null;
+  currentRound: CahRound | null;
 
   constructor(game: CahGame, userId: string) {
     this.id = game.id;
@@ -28,7 +28,7 @@ class CahGameDto implements GameDto {
     }
   }
 
-  private filterAnswersByUserId(answers: Answer[], userId: string): Answer[] {
+  private filterAnswersByUserId(answers: CahAnswer[], userId: string): CahAnswer[] {
     return answers.map((answer) => {
       if (answer.votes.some((vote) => vote.id === userId)) {
         return {...answer, votes: answer.votes.filter((vote) => vote.id === userId)}

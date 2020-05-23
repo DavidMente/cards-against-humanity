@@ -1,10 +1,10 @@
 import Game from "../Game";
-import Round from "./Round";
+import CahRound from "./CahRound";
 
 class CahGame extends Game {
 
-  public previousRound: Round | null = null;
-  public currentRound: Round | null = null;
+  public previousRound: CahRound | null = null;
+  public currentRound: CahRound | null = null;
 
   constructor(id: string) {
     super(id);

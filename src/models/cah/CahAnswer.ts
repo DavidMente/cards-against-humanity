@@ -3,7 +3,7 @@ export interface PlayerAnswer {
   name: string;
 }
 
-class Answer {
+class CahAnswer {
 
   public text: string;
   public votes: PlayerAnswer[] = [];
@@ -15,4 +15,4 @@ class Answer {
 
 }
 
-export default Answer
+export default CahAnswer

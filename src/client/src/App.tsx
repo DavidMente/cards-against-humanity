@@ -10,6 +10,7 @@ import Footer from "./components/layout/Footer";
 import CreateGameForm from "./components/game/create/CreateGameForm";
 import MainSection from "./components/layout/MainSection";
 import ConnectionIndicator from "./components/toast/ConnectionIndicator";
+import DrawGameSection from "./components/draw/DrawGameSection";
 
 function App() {
   return (
@@ -20,6 +21,7 @@ function App() {
           <Switch>
             <Route exact path={'/'} component={CreateGameForm} />
             <Route exact path={'/game/:gameId'} component={GameSection} />
+            <Route exact path={'/draw'} component={DrawGameSection} />
           </Switch>
         </MainSection>
         <ConnectionIndicator />

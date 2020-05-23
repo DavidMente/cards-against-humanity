@@ -2,7 +2,7 @@ import CahGameController from "./CahGameController";
 import WebSocket from "ws";
 import {CREATE_GAME, JOIN_GAME, LOAD_GAME, START_GAME, VOTE} from "../routes/webSocketParser";
 import GameController from "./GameController";
-import {cahGameRepository} from "../repositories/CahGameRepository";
+import {cahGameRepository} from "../repositories/cah/CahGameRepository";
 import CahGame from "../models/cah/CahGame";
 import {userRepository} from "../repositories/UserRepository";
 import Player from "../models/Player";

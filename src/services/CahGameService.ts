@@ -1,10 +1,9 @@
 import CahGame from "../models/cah/CahGame";
-import Answer from "../models/cah/Answer";
-import Round from "../models/cah/Round";
-import Game from "../models/Game";
+import CahAnswer from "../models/cah/CahAnswer";
+import CahRound from "../models/cah/CahRound";
 import GameService from "./GameService";
-import {cahGameRepository} from "../repositories/CahGameRepository";
-import {questionsAnswersRepository} from "../repositories/QuestionsAnswersRepository";
+import {cahGameRepository} from "../repositories/cah/CahGameRepository";
+import {questionsAnswersRepository} from "../repositories/cah/QuestionsAnswersRepository";
 
 class CahGameService extends GameService {
 
@@ -18,9 +17,9 @@ class CahGameService extends GameService {
 
   public createNewRound(game: CahGame): CahGame {
     const question = this.questionsAnswerRepository.getQuestion();
-    const answers = this.questionsAnswerRepository.getAnswers(CahGameService.ANSWER_COUNT).map((answer) => new Answer(answer));
+    const answers = this.questionsAnswerRepository.getAnswers(CahGameService.ANSWER_COUNT).map((answer) => new CahAnswer(answer));
     const roundNumber = game.previousRound === null ? 1 : game.previousRound.number + 1;
-    game.currentRound = new Round(question, answers, roundNumber);
+    game.currentRound = new CahRound(question, answers, roundNumber);
     return game;
   }
 
@@ -35,7 +34,7 @@ class CahGameService extends GameService {
     this.setPlayersNotReady(game);
   }
 
-  private determineWinningAnswer(game: CahGame): Answer | null {
+  private determineWinningAnswer(game: CahGame): CahAnswer | null {
     const round = game.currentRound!;
     const voteCounts = round.answers.map((answer) => answer.votes.length);
     let max = 0, winningIndex = null;
@@ -54,7 +53,7 @@ class CahGameService extends GameService {
     }
   }
 
-  private addPointsForWinningAnswer(game: CahGame, winningAnswer: Answer) {
+  private addPointsForWinningAnswer(game: CahGame, winningAnswer: CahAnswer) {
     winningAnswer.votes.forEach((vote) => {
       const player = game.players.find((player) => player.userId === vote.id);
       if (player !== undefined) {
