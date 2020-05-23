@@ -2,20 +2,20 @@ import WebSocket from "ws";
 import {CreateGame, JoinGame, LoadGame, StartGame} from "../routes/webSocketParser";
 import MessageDto from "../dto/MessageDto";
 import GameService from "../services/GameService";
-import Game from "../models/Game";
-import {GameRepository} from "../repositories/GameRepository";
 import {GameDto} from "../dto/GameDto";
-import UserRepository from "../repositories/UserRepository";
+import UserRepository, {userRepository} from "../repositories/UserRepository";
 import User from "../models/User";
 import ExceptionController from "./ExceptionController";
+import GameRepository from "../repositories/GameRepository";
+import Game from "../models/Game";
 
-abstract class GameController {
+abstract class GameController<T extends Game> {
 
   static GAME_LOADED = 'GAME_LOADED';
   static GAME_CREATED = 'GAME_CREATED';
-  protected abstract gameService: GameService;
-  protected abstract gameRepository: GameRepository;
-  protected abstract userRepository: UserRepository;
+  protected abstract gameService: GameService<T>;
+  protected abstract gameRepository: GameRepository<T>;
+  protected userRepository: UserRepository = userRepository;
 
   public createGame = (ws: WebSocket, request: CreateGame): void => {
     const user = this.userRepository.getUserByWebSocket(ws);
@@ -58,24 +58,24 @@ abstract class GameController {
     }
   };
 
-  protected start(game: Game) {
+  protected start(game: T) {
     game.start();
   }
 
-  protected sendUpdateToPlayers(game: Game): void {
+  protected sendUpdateToPlayers(game: T): void {
     const users = game.players
       .map((player) => this.userRepository.getUserById(player.userId))
       .filter((user) => user !== undefined);
     users.forEach((user) => this.response(GameController.GAME_LOADED, user!, game))
   }
 
-  public response(action: string, user: User, game: Game): void {
+  public response(action: string, user: User, game: T): void {
     const gameDto = this.gameToDto(game, user.id);
     const payload = new MessageDto(action, gameDto);
     user.socket.send(JSON.stringify(payload));
   }
 
-  abstract gameToDto(game: Game, userId: string): GameDto
+  abstract gameToDto(game: T, userId: string): GameDto
 
 }
 

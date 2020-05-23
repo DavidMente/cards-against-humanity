@@ -2,18 +2,16 @@ import WebSocket from "ws";
 import {Vote} from "../routes/webSocketParser";
 import {PlayerStatus} from "../models/Player";
 import GameController from "./GameController";
-import {cahGameRepository} from "../repositories/cah/CahGameRepository";
 import CahGame from "../models/cah/CahGame";
-import CahGameDto from "../dto/CahGameDto";
+import CahGameDto from "../dto/cah/CahGameDto";
 import CahGameService from "../services/CahGameService";
-import {userRepository} from "../repositories/UserRepository";
 import ExceptionController from "./ExceptionController";
+import {cahGameRepository} from "../repositories/cah/CahGameRepository";
 
-class CahGameController extends GameController {
+class CahGameController extends GameController<CahGame> {
 
   protected gameService = new CahGameService();
   protected gameRepository = cahGameRepository;
-  protected userRepository = userRepository;
 
   protected start(game: CahGame) {
     game.start();

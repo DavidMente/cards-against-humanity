@@ -7,8 +7,8 @@ class QuestionsAnswersRepository {
   private readonly answers: string[];
 
   constructor() {
-    this.questions = QuestionsAnswersRepository.fileToArray(path.resolve('src/repositories/questions.txt'));
-    this.answers = QuestionsAnswersRepository.fileToArray(path.resolve('src/repositories/answers.txt'));
+    this.questions = QuestionsAnswersRepository.fileToArray(path.resolve('src/repositories/cah/questions.txt'));
+    this.answers = QuestionsAnswersRepository.fileToArray(path.resolve('src/repositories/cah/answers.txt'));
   }
 
   private static fileToArray(filename: string): string[] {

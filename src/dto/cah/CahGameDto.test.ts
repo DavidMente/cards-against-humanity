@@ -1,5 +1,5 @@
-import CahGame from "../models/cah/CahGame";
-import CahGameService from "../services/CahGameService";
+import CahGame from "../../models/cah/CahGame";
+import CahGameService from "../../services/CahGameService";
 import CahGameDto from "./CahGameDto";
 
 describe('CahGameDto', () => {

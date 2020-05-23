@@ -1,10 +1,10 @@
-import {GameStatus} from "../models/Game";
-import CahRound from "../models/cah/CahRound";
-import CahGame from "../models/cah/CahGame";
-import {PlayerDto} from "./PlayerDto";
-import {GameDto} from "./GameDto";
-import CahAnswer from "../models/cah/CahAnswer";
+import {GameStatus} from "../../models/Game";
+import CahGame from "../../models/cah/CahGame";
+import {PlayerDto} from "../PlayerDto";
+import {GameDto} from "../GameDto";
 import CahPlayerDto from "./CahPlayerDto";
+import CahRound from "../../models/cah/CahRound";
+import CahAnswer from "../../models/cah/CahAnswer";
 
 class CahGameDto implements GameDto {
 

@@ -5,7 +5,7 @@ import GameService from "./GameService";
 import {cahGameRepository} from "../repositories/cah/CahGameRepository";
 import {questionsAnswersRepository} from "../repositories/cah/QuestionsAnswersRepository";
 
-class CahGameService extends GameService {
+class CahGameService extends GameService<CahGame> {
 
   public static ANSWER_COUNT: number = 4;
   protected gameRepository = cahGameRepository;

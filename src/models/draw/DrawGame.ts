@@ -11,3 +11,5 @@ class DrawGame extends Game {
   }
 
 }
+
+export default DrawGame

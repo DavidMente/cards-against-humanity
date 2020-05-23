@@ -1,7 +1,7 @@
-import {PlayerDto} from "./PlayerDto";
-import Player, {PlayerStatus} from "../models/Player";
+import {PlayerDto} from "../PlayerDto";
+import Player, {PlayerStatus} from "../../models/Player";
 
-class CahPlayerDto implements PlayerDto {
+class DrawPlayerDto implements PlayerDto {
   id: string;
   userId: string;
   name: string;
@@ -18,4 +18,4 @@ class CahPlayerDto implements PlayerDto {
 
 }
 
-export default CahPlayerDto
+export default DrawPlayerDto
