@@ -8,8 +8,13 @@ import CahGameService from "../services/CahGameService";
 import ExceptionController from "./ExceptionController";
 import {cahGameRepository} from "../repositories/cah/CahGameRepository";
 
+export const CAH_GAME_LOADED = 'CAH_GAME_LOADED';
+export const CAH_GAME_CREATED = 'CAH_GAME_CREATED';
+
 class CahGameController extends GameController<CahGame> {
 
+  protected GAME_LOADED = CAH_GAME_LOADED;
+  protected GAME_CREATED = CAH_GAME_CREATED;
   protected gameService = new CahGameService();
   protected gameRepository = cahGameRepository;
 

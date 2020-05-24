@@ -11,8 +11,8 @@ import Game from "../models/Game";
 
 abstract class GameController<T extends Game> {
 
-  static GAME_LOADED = 'GAME_LOADED';
-  static GAME_CREATED = 'GAME_CREATED';
+  protected abstract GAME_LOADED: string;
+  protected abstract GAME_CREATED: string;
   protected abstract gameService: GameService<T>;
   protected abstract gameRepository: GameRepository<T>;
   protected userRepository: UserRepository = userRepository;
@@ -20,14 +20,14 @@ abstract class GameController<T extends Game> {
   public createGame = (ws: WebSocket, request: CreateGame): void => {
     const user = this.userRepository.getUserByWebSocket(ws);
     const game = this.gameService.createGameWithPlayer(request.payload.playerName, user.id);
-    this.response(GameController.GAME_CREATED, user, game);
+    this.response(this.GAME_CREATED, user, game);
   };
 
   public loadGame = (ws: WebSocket, request: LoadGame): void => {
     try {
       const user = this.userRepository.getUserByWebSocket(ws);
       const game = this.gameRepository.findGameById(request.payload.gameId);
-      this.response(GameController.GAME_LOADED, user, game);
+      this.response(this.GAME_LOADED, user, game);
     } catch (exception) {
       ExceptionController.handle(ws, exception);
     }
@@ -66,7 +66,7 @@ abstract class GameController<T extends Game> {
     const users = game.players
       .map((player) => this.userRepository.getUserById(player.userId))
       .filter((user) => user !== undefined);
-    users.forEach((user) => this.response(GameController.GAME_LOADED, user!, game))
+    users.forEach((user) => this.response(this.GAME_LOADED, user!, game))
   }
 
   public response(action: string, user: User, game: T): void {

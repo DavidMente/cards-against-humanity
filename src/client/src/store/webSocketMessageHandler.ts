@@ -4,8 +4,8 @@ import {setGame} from "./game/actions";
 import {connectWebSocket, history} from './'
 import {authentication} from "../services/authentication";
 
-export const GAME_LOADED = 'GAME_LOADED';
-export const GAME_CREATED = 'GAME_CREATED';
+export const CAH_GAME_LOADED = 'CAH_GAME_LOADED';
+export const CAH_GAME_CREATED = 'CAH_GAME_CREATED';
 export const AUTHENTICATED = 'AUTHENTICATED';
 export const NOT_FOUND = 'NOT_FOUND';
 
@@ -14,10 +14,10 @@ export const webSocketMessageHandler: Middleware = (api) => (next) => (action) =
     const message = JSON.parse(action.payload.message);
     if (message.hasOwnProperty('action')) {
       switch (message.action) {
-        case GAME_LOADED:
+        case CAH_GAME_LOADED:
           return next(setGame(message.payload));
-        case GAME_CREATED:
-          return history.push(`/game/${message.payload.id}`);
+        case CAH_GAME_CREATED:
+          return history.push(`/cah/${message.payload.id}`);
         case AUTHENTICATED:
           return authentication.storeUser(message.payload.user);
         case NOT_FOUND:

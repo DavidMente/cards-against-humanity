@@ -1,4 +1,4 @@
-import CahGameController from "./CahGameController";
+import CahGameController, {CAH_GAME_CREATED, CAH_GAME_LOADED} from "./CahGameController";
 import WebSocket from "ws";
 import {CREATE_GAME, JOIN_GAME, LOAD_GAME, START_GAME, VOTE} from "../routes/webSocketParser";
 import GameController from "./GameController";
@@ -22,7 +22,7 @@ describe('CahGameController', () => {
     cahGameController.createGame(ws, {action: CREATE_GAME, payload: {playerName: 'jack'}});
 
     const response = JSON.parse(sendMock.mock.calls[0]);
-    expect(response.action).toEqual(GameController.GAME_CREATED);
+    expect(response.action).toEqual(CAH_GAME_CREATED);
   });
 
   it('should load an existing game', () => {
@@ -31,7 +31,7 @@ describe('CahGameController', () => {
     cahGameController.loadGame(ws, {action: LOAD_GAME, payload: {gameId: GAME_ID}});
 
     const response = JSON.parse(sendMock.mock.calls[0]);
-    expect(response.action).toEqual(GameController.GAME_LOADED);
+    expect(response.action).toEqual(CAH_GAME_LOADED);
   });
 
   it('should return NOT_FOUND', () => {
@@ -48,7 +48,7 @@ describe('CahGameController', () => {
     cahGameController.joinGame(ws, {action: JOIN_GAME, payload: {gameId: GAME_ID, playerName: PLAYER_NAME}});
 
     const response = JSON.parse(sendMock.mock.calls[0]);
-    expect(response.action).toEqual(GameController.GAME_LOADED);
+    expect(response.action).toEqual(CAH_GAME_LOADED);
     const game = cahGameRepository.findGameById(GAME_ID);
     expect(game).toBeDefined();
     expect(game!.players).toHaveLength(1);

@@ -1,7 +1,7 @@
 import {authentication} from "../services/authentication";
 import {buildStore, rootReducer, storeEnhancer} from './';
 import {REDUX_WEBSOCKET_MESSAGE} from "./websocket/types";
-import {AUTHENTICATED, GAME_LOADED, webSocketMessageHandler} from "./webSocketMessageHandler";
+import {AUTHENTICATED, CAH_GAME_LOADED, webSocketMessageHandler} from "./webSocketMessageHandler";
 import {Store} from "redux";
 
 describe('webSocketMessageHandler', () => {
@@ -12,7 +12,7 @@ describe('webSocketMessageHandler', () => {
 
   it('should load a game', () => {
     expect(reduxStore.getState().game.id).toBeNull();
-    const message = {action: GAME_LOADED, payload: {id: '123'}};
+    const message = {action: CAH_GAME_LOADED, payload: {id: '123'}};
     reduxStore.dispatch({type: REDUX_WEBSOCKET_MESSAGE, meta: {}, payload: {message: JSON.stringify(message)}});
     expect(reduxStore.getState().game.id).toEqual(message.payload.id);
   });

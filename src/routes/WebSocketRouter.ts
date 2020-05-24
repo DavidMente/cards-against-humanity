@@ -2,6 +2,7 @@ import WebSocket from "ws";
 import {logger} from "../logger";
 import parseMessage, {CREATE_GAME, JOIN_GAME, LOAD_GAME, START_GAME, VOTE} from "./webSocketParser";
 import CahGameController from "../controllers/CahGameController";
+import http from "http";
 
 class WebSocketRouter {
 
@@ -15,7 +16,8 @@ class WebSocketRouter {
   }
 
   private setupEventHandling(): void {
-    this.webSocketServer.on('connection', (ws: WebSocket) => {
+    this.webSocketServer.on('connection', (ws: WebSocket, msg: http.IncomingMessage) => {
+      logger.info(msg.url); // TODO handle paths
       ws.on('message', (message) => this.routeMessage(ws, message as string));
     })
   }
